@@ -1,58 +1,55 @@
 from flask import Flask, request, jsonify
-import mysql.connector
-from mysql.connector import Error
 from flask_cors import CORS
+import mysql.connector
 
 app = Flask(__name__)
-CORS(app)  # allow frontend requests from browser
+CORS(app)
 
-# ✅ MySQL connection function
-def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",      # change if not local
-        user="root",           # your MySQL username
-        password="yourpassword",  # your MySQL password
-        database="ecoswap"     # database name
-    )
+# MySQL connection
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",        # change if different
+    password="dbms",    # change if different
+    database="ecoswap"  # ✅ correct database name
+)
+cursor = db.cursor(dictionary=True)
 
-# ✅ API: Add a new item
+# POST route to add a new item
 @app.route("/api/items", methods=["POST"])
 def add_item():
-    data = request.json
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
+    data = request.get_json()
 
-        # Insert item into table
-        cursor.execute("""
-            INSERT INTO items (userId, category, itemName, description, itemCondition, itemAction,
-                               location, email, phone, imageCount)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        """, (
-            data["userId"],
-            data["category"],
-            data["itemName"],
-            data["description"],
-            data["itemCondition"],
-            data["itemAction"],
-            data["location"],
-            data["email"],
-            data["phone"],
-            data["imageCount"]
-        ))
-        conn.commit()
+    sql = """INSERT INTO items 
+             (userId, category, itemName, description, itemCondition, itemAction, location, email, phone, imageCount) 
+             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+    values = (
+        1,  # test userId (make sure at least 1 user exists in `users`)
+        data.get("category"),
+        data.get("itemName"),
+        data.get("description"),
+        data.get("itemCondition"),
+        data.get("itemAction"),
+        data.get("location"),
+        data.get("email"),
+        data.get("phone"),
+        data.get("imageCount", 0)
+    )
 
-        # Update green points
-        cursor.execute("UPDATE users SET greenPoints = greenPoints + 10 WHERE id = %s", (data["userId"],))
-        conn.commit()
+    cursor.execute(sql, values)
+    db.commit()
 
-        cursor.close()
-        conn.close()
+    return jsonify({"message": "Item added successfully!"}), 201
 
-        return jsonify({"success": True, "message": "Item added successfully!"})
-    except Error as e:
-        print("DB Error:", e)
-        return jsonify({"success": False, "message": "Database error"}), 500
+# Optional: GET route to check stored items
+@app.route("/api/items", methods=["GET"])
+def get_items():
+    cursor.execute("SELECT * FROM items ORDER BY createdAt DESC")
+    items = cursor.fetchall()
+    return jsonify(items)
+
+@app.route("/")
+def home():
+    return "Flask backend is running 🚀"
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True)
