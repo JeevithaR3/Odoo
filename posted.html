@@ -189,6 +189,7 @@
       </form>
     </header>
 
+    <!-- Filter/Sort bar (inserted by JS if you prefer; here we keep markup clean and add via JS later) -->
     <section class="max-w-6xl mx-auto px-4 mt-8" id="itemsContainer">
       <!-- Posted items will be injected here by posted.js -->
     </section>
@@ -232,5 +233,216 @@
   </script>
 
   <script type="module" src="posted.js"></script>
+
+  <!-- === Add-ons: Cart + Sort/Filter (non-invasive) === -->
+  <script>
+  (function () {
+    const itemsContainer = document.getElementById("itemsContainer");
+    const main = document.querySelector("main");
+    const nav = document.querySelector("nav");
+
+    /* ---------------- CART (navbar button + storage) ---------------- */
+    // Add a Cart button to navbar (no markup changes to your original file)
+    const cartWrapper = document.createElement("div");
+    cartWrapper.className = "flex items-center space-x-4";
+    cartWrapper.innerHTML = `
+      <button id="eco-cart-btn" class="relative px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition">
+        Cart
+        <span id="eco-cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-2">0</span>
+      </button>`;
+    nav.appendChild(cartWrapper);
+
+    let cart = JSON.parse(localStorage.getItem("eco-cart") || "[]");
+    const ecoCartBtn = document.getElementById("eco-cart-btn");
+    const ecoCartCount = document.getElementById("eco-cart-count");
+    function saveCart(){ localStorage.setItem("eco-cart", JSON.stringify(cart)); }
+    function updateCartCount(){ ecoCartCount.textContent = cart.length; }
+    updateCartCount();
+
+    ecoCartBtn.addEventListener("click", () => {
+      if (cart.length === 0) return alert("Your cart is empty.");
+      const lines = cart.map(it => `${it.name}${it.price!=null?` – ₹${it.price}`:''}${it.category?` [${it.category}]`:''}`);
+      alert("Cart items:\n\n" + lines.join("\n"));
+    });
+
+    /* ---------------- Filter/Sort Toolbar ---------------- */
+    const filterBar = document.createElement("section");
+    filterBar.className = "max-w-6xl mx-auto px-4 mt-4";
+    filterBar.innerHTML = `
+      <div class="flex flex-wrap items-center gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-3">
+        <div class="flex items-center gap-2">
+          <label for="eco-filter-category" class="text-sm">Category</label>
+          <select id="eco-filter-category" class="border rounded px-2 py-1 dark:bg-gray-700 dark:text-white">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="eco-filter-name" class="text-sm">Name</label>
+          <input id="eco-filter-name" type="text" placeholder="type to filter…" class="border rounded px-2 py-1 dark:bg-gray-700 dark:text-white"/>
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="eco-sort" class="text-sm">Sort</label>
+          <select id="eco-sort" class="border rounded px-2 py-1 dark:bg-gray-700 dark:text-white">
+            <option value="">Default</option>
+            <option value="name-asc">Name A–Z</option>
+            <option value="name-desc">Name Z–A</option>
+            <option value="price-asc">Price Low–High</option>
+            <option value="price-desc">Price High–Low</option>
+          </select>
+        </div>
+        <button id="eco-clear" class="ml-auto bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded">Clear</button>
+      </div>`;
+    // insert toolbar just before the items container
+    main.insertBefore(filterBar, itemsContainer);
+
+    const selCategory = document.getElementById("eco-filter-category");
+    const inpName = document.getElementById("eco-filter-name");
+    const selSort = document.getElementById("eco-sort");
+    const btnClear = document.getElementById("eco-clear");
+
+    selCategory.addEventListener("change", applyFiltersAndSort);
+    inpName.addEventListener("input", () => applyFiltersAndSort());
+    selSort.addEventListener("change", () => applyFiltersAndSort(true));
+    btnClear.addEventListener("click", () => {
+      selCategory.value = "";
+      inpName.value = "";
+      selSort.value = "";
+      applyFiltersAndSort(true);
+    });
+
+    function titleCase(s){ return s.replace(/\b\w/g, ch => ch.toUpperCase()); }
+
+    /* ---------------- Card Enhancement (Cart button) ---------------- */
+    // Works with ANY markup posted.js injects—no need to change posted.js
+    const observer = new MutationObserver(() => enhanceAll());
+    observer.observe(itemsContainer, { childList: true, subtree: true });
+    // run once too
+    enhanceAll();
+
+    function enhanceAll() {
+      // consider each direct child a "card"
+      const cards = Array.from(itemsContainer.children).filter(el => el.nodeType === 1);
+      cards.forEach((card, idx) => {
+        if (card.dataset.ecoEnhanced === "1") return;
+
+        // tag as a card for filtering/sorting
+        card.setAttribute("data-eco-card", "");
+
+        // extract meta (name/category/price) safely from text
+        const meta = extractMeta(card, idx);
+
+        // add a Cart button (append at end to avoid conflicts)
+        const btnWrap = document.createElement("div");
+        btnWrap.className = "eco-btns flex gap-2 mt-3";
+        btnWrap.innerHTML = `
+          <button class="eco-add-to-cart bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition">Add to Cart</button>
+        `;
+        card.appendChild(btnWrap);
+
+        // mark enhanced
+        card.dataset.ecoEnhanced = "1";
+      });
+
+      // hook up one delegated click listener for all cart buttons
+      if (!itemsContainer.dataset.ecoCartBound) {
+        itemsContainer.addEventListener("click", (e) => {
+          const btn = e.target.closest(".eco-add-to-cart");
+          if (!btn) return;
+          const card = btn.closest("[data-eco-card]");
+          const meta = extractMeta(card, 0);
+
+          // add to cart (dedupe by id)
+          if (!cart.some(i => i.id === meta.id)) {
+            cart.push(meta);
+            saveCart();
+            updateCartCount();
+          }
+          alert(`${meta.name} added to cart`);
+        });
+        itemsContainer.dataset.ecoCartBound = "1";
+      }
+
+      buildCategoryOptions();
+      applyFiltersAndSort();
+    }
+
+    function extractMeta(card, idx) {
+      const text = (card.innerText || "").trim();
+
+      // name: first heading or first non-empty line
+      const nameEl = card.querySelector("h1,h2,h3,h4,h5,h6");
+      const name = (nameEl ? nameEl.textContent : (text.split("\n").map(s=>s.trim()).find(Boolean) || `Item ${idx+1}`)).trim();
+
+      // category: prefer data-category attr, else look for "Category: X"
+      let category = (card.dataset.category || "").trim();
+      if (!category) {
+        const m = text.match(/category\s*[:\-]\s*([A-Za-z0-9 _/&]+)/i);
+        if (m) category = m[1].trim();
+      }
+      if (!category) category = "Uncategorized";
+
+      // price (optional, used for sorting if present)
+      let price = null;
+      const priceMatch = text.replace(/,/g, "").match(/(?:₹|\$|€)?\s?(\d+(?:\.\d{1,2})?)/);
+      if (priceMatch) price = parseFloat(priceMatch[1]);
+
+      // persist for filters/sort
+      card.dataset.ecoName = name.toLowerCase();
+      card.dataset.ecoCategory = category.toLowerCase();
+      if (price != null && !isNaN(price)) card.dataset.ecoPrice = String(price);
+
+      // stable-ish id
+      const id = `${name}|${category}|${price ?? "na"}|${idx}`;
+      return { id, name, category, price };
+    }
+
+    /* ---------------- Build Category Options ---------------- */
+    function buildCategoryOptions() {
+      const cats = new Set();
+      itemsContainer.querySelectorAll("[data-eco-card]").forEach(card => {
+        if (card.dataset.ecoCategory) cats.add(card.dataset.ecoCategory);
+      });
+
+      const current = selCategory.value;
+      selCategory.innerHTML = `<option value="">All</option>` +
+        Array.from(cats).sort().map(c => `<option value="${c}">${titleCase(c)}</option>`).join("");
+
+      if ([...selCategory.options].some(o => o.value === current)) selCategory.value = current;
+    }
+
+    /* ---------------- Filtering & Sorting ---------------- */
+    function applyFiltersAndSort(doSort=false) {
+      const nameQ = inpName.value.trim().toLowerCase();
+      const catQ = selCategory.value;
+
+      const cards = Array.from(itemsContainer.children).filter(el => el.dataset && el.dataset.ecoEnhanced === "1");
+
+      cards.forEach(card => {
+        const matchName = !nameQ || (card.dataset.ecoName || "").includes(nameQ);
+        const matchCat = !catQ || (card.dataset.ecoCategory || "") === catQ;
+        card.style.display = (matchName && matchCat) ? "" : "none";
+      });
+
+      const sort = selSort.value;
+      if (sort) {
+        const visible = cards.filter(c => c.style.display !== "none");
+        visible.sort((a, b) => {
+          if (sort.startsWith("name")) {
+            const an = a.dataset.ecoName || "", bn = b.dataset.ecoName || "";
+            return sort === "name-asc" ? an.localeCompare(bn) : bn.localeCompare(an);
+          } else if (sort.startsWith("price")) {
+            const ap = parseFloat(a.dataset.ecoPrice || "Infinity");
+            const bp = parseFloat(b.dataset.ecoPrice || "Infinity");
+            const aVal = isNaN(ap) ? Infinity : ap;
+            const bVal = isNaN(bp) ? Infinity : bp;
+            return sort === "price-asc" ? (aVal - bVal) : (bVal - aVal);
+          }
+          return 0;
+        });
+        visible.forEach(node => itemsContainer.appendChild(node));
+      }
+    }
+  })();
+  </script>
 </body>
 </html>
