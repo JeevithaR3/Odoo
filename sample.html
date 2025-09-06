@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Item Request System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 20%;
+      background: #e8f0fe;
+      padding: 20px;
+      border-right: 2px solid #4b6cb7;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 10px;
+      font-weight: bold;
+      background-color: #4b6cb7;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: #3a539b;
+    }
+
+    .main-content {
+      width: 80%;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    input {
+      width: 60%;
+    }
+
+    button {
+      background-color: #4b6cb7;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3a539b;
+    }
+
+    .item-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+
+    .status-red {
+      background-color: red;
+    }
+
+    .status-green {
+      background-color: #4b6cb7;
+    }
+
+    .provider-box {
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px solid #4b6cb7;
+      border-radius: 8px;
+      background-color: #f0f8ff;
+    }
+
+    .provider-box p {
+      margin: 0 0 8px 0;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    h2, h3 {
+      color: #4b6cb7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <button onclick="showRequestSection()">Request</button>
+    </div>
+
+    <div class="main-content" id="mainContent">
+      <h2>Welcome! Click on "Request" to begin.</h2>
+    </div>
+  </div>
+
+  <script>
+    const requestedItems = [];
+
+    function showRequestSection() {
+      const main = document.getElementById('mainContent');
+      main.innerHTML = `
+        <input type="text" id="searchItem" placeholder="Search item" />
+        <button onclick="searchItem()">Search</button>
+        <h3>Requested List</h3>
+        <div id="requestList"></div>
+      `;
+      updateRequestList();
+    }
+
+    function searchItem() {
+      const itemName = document.getElementById("searchItem").value.trim();
+      const main = document.getElementById("mainContent");
+
+      if (!itemName) return;
+      main.innerHTML += `<div id="searchResults"></div>`;
+      const results = document.getElementById("searchResults");
+      results.innerHTML = '';
+
+      const available = itemName.toLowerCase() === "usb cable";
+
+      if (!available) {
+        results.innerHTML = `
+          <p style="color:#4b6cb7;">Not available</p>
+          <button onclick="window.location.href='reqitem.html?item=${encodeURIComponent(itemName)}'">Request Item</button>
+        `;
+      } else {
+        results.innerHTML = `
+          <div class="provider-box">
+            <p>Provider 1</p>
+            <button onclick="acceptRequest('${itemName}', 'Provider 1')">Request</button>
+          </div>
+          <div class="provider-box">
+            <p>Provider 2 (John, NY)</p>
+            <button onclick="acceptRequest('${itemName}', 'Provider 2')">Request</button>
+          </div>
+        `;
+      }
+    }
+
+    function acceptRequest(name, provider) {
+      requestedItems.push({ name, status: "accepted", provider });
+      showChat(name, provider);
+    }
+
+    function updateRequestList() {
+      const listDiv = document.getElementById("requestList");
+      listDiv.innerHTML = "";
+
+      requestedItems.forEach(item => {
+        const colorClass = item.status === "accepted" ? "status-green" : "status-red";
+        listDiv.innerHTML += `
+          <div class="item-status">
+            <span>${item.name}</span>
+            <div class="status-dot ${colorClass}"></div>
+          </div>
+        `;
+      });
+    }
+
+    function showChat(item, provider) {
+      const main = document.getElementById("mainContent");
+      main.innerHTML = `
+        <h3>${item}</h3>
+        <p>Provider: ${provider}</p>
+        <a href="chat.html" class="btn" style="background-color: #4b6cb7; color: white; padding: 10px 16px; border-radius: 5px; text-decoration: none;">Chat</a>
+      `;
+    }
+  </script>
+</body>
+</html>

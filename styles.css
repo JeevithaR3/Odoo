@@ -1,0 +1,30 @@
+.bg-gradient {
+    background: linear-gradient(to right, #a8e063, #56ab2f);
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 16px;
+  }
+  
+  input::placeholder {
+    color: #aaa;
+    font-style: italic;
+  }
+
+
+.hero {
+  background: url('https://images.unsplash.com/photo-1587502537745-80f68f0f9c1b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  background-blend-mode: overlay;
+  background-color: rgba(0, 100, 0, 0.5);
+}
+
+.step-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
