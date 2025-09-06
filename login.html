@@ -12,7 +12,7 @@
       margin: 0;
       overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #FBF5F0 url('ecofinds-bg.png') no-repeat center center fixed;
+      background: linear-gradient(120deg, rgba(219,120,62,0.55) 0%, rgba(242,227,216,0.45) 60%, rgba(2,74,67,0.22) 100%);
       background-size: cover;
       position: relative;
     }
@@ -124,8 +124,12 @@
   </style>
 </head>
 <body>
-  <!-- Background with your image -->
-  <div class="bg-overlay" id="overlay"></div>
+    <!-- Logo top left -->
+    <div style="position: absolute; top: 32px; left: 32px; z-index: 2; display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.5rem; color: #142D25;">
+      <img src="logo_ecofinds.png" alt="EcoFinds Logo" style="height:38px;width:38px;border-radius:50%;object-fit:cover;"> EcoFinds
+    </div>
+    <!-- Background with your image -->
+    <div class="bg-overlay" id="overlay"></div>
 
   <!-- Login Form -->
   <div class="container d-flex justify-content-center align-items-center min-vh-100">

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EcoFinds | Sign Up</title>
-  <link rel="icon" href="./logo.png" type="image/x-icon">
+  <link rel="icon" href="./logo_ecofinds.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
     :root {
@@ -20,7 +20,7 @@
       margin: 0;
       overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--silver-bird) url('eco-finds-bg.jpg') no-repeat center center fixed;
+      background: linear-gradient(120deg, rgba(219,120,62,0.55) 0%, rgba(242,227,216,0.45) 60%, rgba(2,74,67,0.22) 100%);
       background-size: cover;
       background-position: center center;
       position: relative;
@@ -31,7 +31,7 @@
       left: 0;
       width: 220px;
       height: 100vh;
-      background: rgba(20, 45, 37, 0.35);
+      background: rgba(219,120,62,0.22);
       backdrop-filter: blur(16px) saturate(180%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
       box-shadow: 2px 0 18px rgba(20,45,37,0.10);
@@ -110,16 +110,6 @@
       justify-content: space-between;
       padding: 1.2rem 2rem 0.5rem 2rem;
     }
-    .hamburger {
-      background: none;
-      border: none;
-      font-size: 2rem;
-      color: var(--guerrilla-forest);
-      cursor: pointer;
-      margin-right: 1rem;
-      display: flex;
-      align-items: center;
-    }
     .logo {
       display: flex;
       align-items: center;
@@ -138,7 +128,7 @@
       max-width: 440px;
       width: 100%;
       border: none;
-      background: rgba(242, 227, 216, 0.75);
+      background: rgba(242, 227, 216, 0.85);
       box-shadow: 0 8px 32px rgba(20, 45, 37, 0.18);
       border-radius: 18px;
       overflow: hidden;
@@ -240,7 +230,7 @@
 <body>
   <div class="glass-sidebar" id="sidebar">
     <div class="sidebar-header">
-      <img src="logo.png" alt="Logo" /> EcoFinds
+      <img src="logo_ecofinds.png" alt="Logo" /> EcoFinds
     </div>
     <nav>
       <a href="contact.html">Contact</a>
@@ -254,9 +244,8 @@
   </div>
   <div class="main-content" id="mainContent">
     <div class="top-bar">
-      <button class="hamburger" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>
       <div class="logo">
-        <img src="logo.png" alt="Logo" /> EcoFinds
+        <img src="logo_ecofinds.png" alt="Logo" /> EcoFinds
       </div>
     </div>
     <div class="container d-flex justify-content-center align-items-center min-vh-100" style="z-index:1;">

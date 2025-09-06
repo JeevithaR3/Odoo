@@ -11,10 +11,9 @@
       min-height: 100vh;
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #FBF5F0 url('eco-finds-bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      background-position: center center;
+      background: linear-gradient(135deg, rgba(219,120,62,0.35) 0%, rgba(2,74,67,0.32) 100%);
       position: relative;
+      /* Remove image bg for glassmorphism */
     }
 
     .bg-overlay {
@@ -23,7 +22,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(20, 45, 37, 0.07);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
       z-index: -1;
     }
 
@@ -274,59 +275,25 @@
     }
   </style>
 </head>
-<body class="font-sans text-gray-800 antialiased min-h-screen flex flex-col bg-blue-50 dark:bg-[#1e3a8a]">
-  <!-- Navbar -->
-  <nav class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur shadow-sm dark:bg-gray-800/90 flex items-center justify-between px-6 py-4">
-    <a href="home.html" class="flex items-center space-x-3">
-      <img src="./logo.png" alt="EcoSwap logo" class="h-12 w-auto" />
-      <span class="text-2xl font-bold gradient-text">EcoSwap</span>
-    </a>
-
-    <h1 class="text-2xl font-serif font-bold text-gray-800 dark:text-gray-200">Dashboard</h1>
-
-    <!-- Theme Toggle -->
-    <button id="theme-toggle" aria-label="Toggle dark/light mode" class="px-4 py-2 rounded-md text-white hover:bg-accent transition flex items-center" type="button">
-      <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
-      </svg>
-      <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
-      </svg>
-    </button>
-  </nav>
-
-  <!-- Main Content -->
-  <main class="flex flex-1 pt-20">
-    <aside id="sidebar" class="fixed top-20 bottom-0 left-0 flex flex-col overflow-y-auto">
-      <div id="sidebar-search">
-        <input type="text" placeholder="Search..." aria-label="Search" class="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600" />
-      </div>
-
-      <nav class="flex flex-col mt-2 space-y-1 px-4 flex-grow">
-        <a href="dashboard.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Profile</a>
-        <a href="newitem.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Add New Item</a>
-        <a href="posted.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">My Posted Items</a>
-        <a href="reqitemp.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Request New Item</a>
-        <a href="reqJeevitha.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Requested Items</a>
-      </nav>
-
-      <nav class="px-4 py-3">
-        <a href="index.html" id="signout-tab" class="block rounded-md px-4 py-3 text-white transition">Sign Out</a>
-      </nav>
-    </aside>
-
-    <section id="profile-section" class="ml-[220px] flex-1 bg-white dark:bg-gray-800 p-2 overflow-auto">
-      <div class="max-w-3xl mx-auto">
-        <form id="profile-form" class="space-y-8">
-          <div class="flex flex-col items-center mb-6">
-            <img src="./default-user.png" alt="Profile Image" id="profile-image" title="Click to upload" />
-            <input type="file" id="profile-image-input" accept="image/*" class="hidden" />
+<body>
+  <div class="bg-overlay" id="overlay"></div>
+  <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100" style="z-index:1;">
+    <div class="dashboard-main-card">
+      <!-- Top bar with centered logo, cart and edit on the right -->
+      <div class="d-flex align-items-center mb-4" style="justify-content: center; position: relative;">
+        <div class="logo mx-auto" style="font-weight:700;font-size:1.3rem;color:#142D25;display:flex;align-items:center;gap:0.5rem;">
+          <img src="logo_ecofinds.png" alt="EcoFinds Logo" style="height:40px;width:40px;border-radius:50%;object-fit:cover;"> EcoFinds
+        </div>
+        <div style="position: absolute; right: 0; display: flex; align-items: center; gap: 1rem;">
+          <div class="cart-icon" style="width:36px;height:36px;background:#DB783E;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FBF5F0;position:relative;cursor:pointer;font-size:1.3rem;">
+            🛒
+            <span class="cart-badge" style="position:absolute;top:-8px;right:-8px;background:#AA423A;color:#FBF5F0;font-size:11px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;">1</span>
           </div>
-          <button class="edit-profile-btn" style="margin:0;padding:7px 16px;" onclick="editProfile()">Edit</button>
+          <button class="edit-profile-btn" onclick="editProfile()" style="margin:0;min-width:80px;">Edit</button>
         </div>
       </div>
       <!-- Profile info section -->
-      <div class="dashboard-card" style="margin:0;box-shadow:none;padding:0;background:transparent;">
+      <div class="dashboard-card" style="margin:0;box-shadow:none;padding:0;background:transparent;position:relative;">
         <div class="avatar mb-3 mx-auto" onclick="triggerProfileImageUpload()">
           <svg width="40" height="40" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="27" cy="27" r="27" fill="#024A43"/>
