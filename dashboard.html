@@ -39,15 +39,20 @@
       100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
     }
 
-    .dashboard-card, .dashboard-main-card {
+    .dashboard-card {
+      max-width: 480px;
+      width: 100%;
+      margin: 2.5rem auto;
       background: #F2E3D8;
       border-radius: 18px;
       box-shadow: 0 8px 32px rgba(20, 45, 37, 0.18);
-      padding: 2.2rem 2rem;
+      padding: 2.2rem 2rem 2rem 2rem;
       transition: transform 0.3s ease;
     }
 
-    .dashboard-card:hover, .dashboard-main-card:hover { transform: translateY(-5px); }
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
 
     .avatar {
       width: 72px;
@@ -62,9 +67,20 @@
       cursor: pointer;
     }
 
-    .profile-title { color: #142D25; font-weight: 700; font-size: 2.1rem; text-align: center; margin-bottom: 1.2rem; }
+    .profile-title {
+      color: #142D25;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      font-size: 2.1rem;
+      text-align: center;
+    }
 
-    .profile-info { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
 
     .info-field {
       background: #FBF5F0;
@@ -83,7 +99,9 @@
       background: #F2E3D8;
     }
 
-    .info-field::placeholder { color: rgba(20, 45, 37, 0.6); }
+    .info-field::placeholder {
+      color: rgba(20, 45, 37, 0.6);
+    }
 
     .edit-profile-btn {
       background: #DB783E;
@@ -96,6 +114,8 @@
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 2px 8px rgba(219, 120, 62, 0.3);
+      margin: 0 auto 1.2rem auto;
+      display: block;
     }
 
     .edit-profile-btn:hover {
@@ -121,19 +141,31 @@
       display: none;
     }
 
-    .save-btn.show { display: block; }
+    .save-btn.show {
+      display: block;
+    }
 
     .navigation-section {
+      background-color: #F2E3D8;
       border-radius: 18px;
       padding: 1.5rem;
       box-shadow: 0 8px 32px rgba(20, 45, 37, 0.18);
       margin-top: 1.5rem;
-      background: #F2E3D8;
     }
 
-    .navigation-title { color: #142D25; font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; text-align: center; }
+    .navigation-title {
+      color: #142D25;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
 
-    .nav-buttons { display: flex; flex-direction: column; gap: 0.8rem; }
+    .nav-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
 
     .nav-btn {
       background: #FBF5F0;
@@ -156,40 +188,73 @@
       box-shadow: 0 4px 8px rgba(2, 74, 67, 0.2);
     }
 
-    .cart-icon { width: 36px; height: 36px; background: #DB783E; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #FBF5F0; font-size: 1.3rem; cursor: pointer; position: relative; }
-    .cart-badge { position: absolute; top: -8px; right: -8px; background: #AA423A; color: #FBF5F0; font-size: 11px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+    .dashboard-main-card {
+      max-width: 540px;
+      width: 100%;
+      background: #F2E3D8;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(20, 45, 37, 0.18);
+      padding: 2.2rem 2rem 2rem 2rem;
+      margin: 2rem auto;
+    }
+
+    .logo img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .cart-icon {
+      width: 36px;
+      height: 36px;
+      background: #DB783E;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FBF5F0;
+      position: relative;
+      cursor: pointer;
+      font-size: 1.3rem;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #AA423A;
+      color: #FBF5F0;
+      font-size: 11px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
   <div class="bg-overlay" id="overlay"></div>
   <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100" style="z-index:1;">
     <div class="dashboard-main-card">
-
       <!-- Top bar -->
       <div class="d-flex align-items-center mb-4" style="justify-content: center; position: relative;">
-        <!-- Logo centered -->
         <div class="logo mx-auto" style="font-weight:700;font-size:1.3rem;color:#142D25;display:flex;align-items:center;gap:0.5rem;">
-          <img src="logo_ecofinds.png" alt="EcoFinds Logo" style="height:40px;width:40px;border-radius:50%;object-fit:cover;"> EcoFinds
+          <img src="logo_ecofinds.png" alt="EcoFinds Logo"> EcoFinds
         </div>
-
-        <!-- Cart & Avatar & Edit button on the right -->
-        <div style="position: absolute; right: 1.5rem; display: flex; align-items: center; gap: 1rem;">
-          <a href="cart.html" class="cart-icon" style="text-decoration:none;">
+        <div style="position: absolute; right: 0; display: flex; align-items: center; gap: 1rem;">
+          <div class="cart-icon">
             🛒
             <span class="cart-badge">1</span>
-          </a>
-          <a href="dashboard.html" class="avatar" style="text-decoration:none;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="8" r="4" fill="#FBF5F0"/>
-              <ellipse cx="12" cy="17" rx="7" ry="5" fill="#FBF5F0"/>
-            </svg>
-          </a>
-          <button class="edit-profile-btn" onclick="editProfile()" style="margin:0; min-width:80px;">Edit</button>
+          </div>
+          <button class="edit-profile-btn" onclick="editProfile()" style="margin:0;min-width:80px;">Edit</button>
         </div>
       </div>
-
       <!-- Profile info -->
-      <div class="dashboard-card" style="margin:0; box-shadow:none; padding:0; background:transparent;">
+      <div class="dashboard-card" style="margin:0;box-shadow:none;padding:0;background:transparent;position:relative;">
         <div class="avatar mb-3 mx-auto" onclick="triggerProfileImageUpload()">
           <svg width="40" height="40" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="27" cy="27" r="27" fill="#024A43"/>
@@ -206,23 +271,19 @@
           <button class="save-btn" id="saveBtn" onclick="saveProfile()">Save Changes</button>
         </div>
       </div>
-
       <!-- Navigation -->
-      <div class="navigation-section">
+      <div class="navigation-section" style="margin-top:1.5rem;">
         <div class="navigation-title">Navigation</div>
         <div class="nav-buttons">
-          <a href="my-listings.html" class="nav-btn">My Listings</a>
-          <a href="my-purchases.html" class="nav-btn">My Purchases</a>
-          <a href="settings.html" class="nav-btn">Settings</a>
+          <a href="landing.html" class="nav-btn">My Listings</a>
+          <a href="posted.html" class="nav-btn">My Purchases</a>
+          <!-- <a href="settings.html" class="nav-btn">Settings</a> -->
           <a href="help.html" class="nav-btn">Help & Support</a>
         </div>
       </div>
-
     </div>
   </div>
-
   <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
-
   <script>
     // Floating particles
     const overlay = document.getElementById('overlay');
@@ -239,7 +300,12 @@
     }
 
     let isEditing = false;
-    let savedData = { userName: "", userEmail: "", userPhone: "", userBio: "" };
+    let savedData = {
+      userName: "",
+      userEmail: "",
+      userPhone: "",
+      userBio: ""
+    };
 
     function editProfile() {
       const fields = document.querySelectorAll('.info-field');
@@ -247,24 +313,45 @@
       const saveBtn = document.getElementById('saveBtn');
 
       if (!isEditing) {
-        fields.forEach(field => { field.removeAttribute('readonly'); field.style.borderColor = '#024A43'; field.style.background = '#F2E3D8'; });
-        editBtn.textContent = 'Cancel'; editBtn.style.background = '#AA423A'; saveBtn.classList.add('show'); isEditing = true;
+        // Enable editing
+        fields.forEach(field => {
+          field.removeAttribute('readonly');
+          field.style.borderColor = '#024A43';
+          field.style.background = '#F2E3D8';
+        });
+        editBtn.textContent = 'Cancel';
+        editBtn.style.background = '#AA423A';
+        saveBtn.classList.add('show');
+        isEditing = true;
       } else {
+        // Cancel editing -> restore last saved data
         document.getElementById('userName').value = savedData.userName;
         document.getElementById('userEmail').value = savedData.userEmail;
         document.getElementById('userPhone').value = savedData.userPhone;
         document.getElementById('userBio').value = savedData.userBio;
-        fields.forEach(field => { field.setAttribute('readonly', true); field.style.borderColor = '#DB783E'; field.style.background = '#FBF5F0'; });
-        editBtn.textContent = 'Edit'; editBtn.style.background = '#DB783E'; saveBtn.classList.remove('show'); isEditing = false;
+
+        fields.forEach(field => {
+          field.setAttribute('readonly', true);
+          field.style.borderColor = '#DB783E';
+          field.style.background = '#FBF5F0';
+        });
+        editBtn.textContent = 'Edit';
+        editBtn.style.background = '#DB783E';
+        saveBtn.classList.remove('show');
+        isEditing = false;
       }
     }
 
     function saveProfile() {
+      // Save current values
       savedData.userName = document.getElementById('userName').value;
       savedData.userEmail = document.getElementById('userEmail').value;
       savedData.userPhone = document.getElementById('userPhone').value;
       savedData.userBio = document.getElementById('userBio').value;
+
       alert('Profile updated successfully!');
+
+      // Exit editing mode
       editProfile();
     }
 
@@ -280,7 +367,11 @@
       }
     }
 
-    function triggerProfileImageUpload() { if (isEditing) document.getElementById('profileImageInput').click(); }
+    function triggerProfileImageUpload() {
+      if (isEditing) {
+        document.getElementById('profileImageInput').click();
+      }
+    }
   </script>
 </body>
 </html>
