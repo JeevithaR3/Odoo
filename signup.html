@@ -2,154 +2,376 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EcoSwap | Sign Up</title>
-  <link rel="icon" href="./logo.png" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoFinds | Sign Up</title>
+  <link rel="icon" href="./logo.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="styles.css" />
-  <script type="module" src="signup.js"></script>
   <style>
+    :root {
+      --silver-bird: #FBF5F0;
+      --guerrilla-forest: #142D25;
+      --soft-sunset: #F2E3D8;
+      --holy-cannoli: #DB783E;
+      --rum-punch: #AA423A;
+      --tropical-forest: #024A43;
+    }
     body {
       min-height: 100vh;
       margin: 0;
       overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('bg.png') no-repeat center center fixed;
+      background: var(--silver-bird) url('eco-finds-bg.jpg') no-repeat center center fixed;
       background-size: cover;
+      background-position: center center;
       position: relative;
     }
-
-    .bg-overlay {
+    .glass-sidebar {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(75, 108, 183, 0.15);
-      z-index: -1;
+      width: 220px;
+      height: 100vh;
+      background: rgba(20, 45, 37, 0.35);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      box-shadow: 2px 0 18px rgba(20,45,37,0.10);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.3s;
     }
-
-    .particle {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.3);
+    .glass-sidebar.open {
+      transform: translateX(0);
+    }
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 1.2rem 1.2rem 1rem 1.2rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--silver-bird);
+    }
+    .sidebar-header img {
+      height: 32px;
+      width: 32px;
       border-radius: 50%;
-      animation: float 15s infinite linear;
+      object-fit: cover;
     }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg);
-        opacity: 0;
-      }
+    .glass-sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1rem 1.2rem;
     }
-
-    .card {
-      max-width: 400px;
+    .glass-sidebar nav a {
+      color: var(--silver-bird);
+      text-decoration: none;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+      font-size: 1rem;
+      backdrop-filter: blur(2px);
+    }
+    .glass-sidebar nav a.active, .glass-sidebar nav a:hover {
+      background: var(--holy-cannoli);
+      color: var(--guerrilla-forest);
+    }
+    .glass-sidebar .signout {
+      margin-top: auto;
+      background: var(--rum-punch);
+      color: var(--silver-bird);
+      font-weight: 700;
+      text-align: center;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      margin: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .glass-sidebar .signout:hover {
+      background: var(--holy-cannoli);
+      color: var(--guerrilla-forest);
+    }
+    .main-content {
+      margin-left: 0;
+      transition: margin-left 0.3s;
+      min-width: 0;
+    }
+    .glass-sidebar.open ~ .main-content {
+      margin-left: 220px;
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem 0.5rem 2rem;
+    }
+    .hamburger {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: var(--guerrilla-forest);
+      cursor: pointer;
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--guerrilla-forest);
+    }
+    .logo img {
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .glass-card {
+      max-width: 440px;
       width: 100%;
       border: none;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      background-color: rgba(255, 255, 255, 0.95);
-      border-radius: 12px;
+      background: rgba(242, 227, 216, 0.75);
+      box-shadow: 0 8px 32px rgba(20, 45, 37, 0.18);
+      border-radius: 18px;
       overflow: hidden;
       transition: transform 0.3s ease;
+      padding: 2.2rem 2rem 2rem 2rem;
+      margin: 0 auto;
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1.5px solid rgba(219, 120, 62, 0.18);
     }
-
-    .card:hover {
+    .glass-card:hover {
       transform: translateY(-5px);
     }
-
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #024A43;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 12px rgba(2, 74, 67, 0.10);
+    }
     .btn-primary-custom {
-      background: linear-gradient(to right, #4b6cb7, #3a56a0);
-      color: white;
+      background: linear-gradient(to right, #142D25, #024A43);
+      color: #FBF5F0;
       border: none;
-      padding: 12px;
+      padding: 12px 28px;
       border-radius: 8px;
       font-weight: 600;
       letter-spacing: 0.5px;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 6px rgba(2, 74, 67, 0.13);
+      font-size: 1.1rem;
     }
-
     .btn-primary-custom:hover {
-      background: linear-gradient(to right, #3a56a0, #2a4285);
+      background: linear-gradient(to right, #024A43, #142D25);
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 6px 12px rgba(2, 74, 67, 0.16);
     }
-
     .signup-title {
-      color: #2a4285;
+      color: #142D25;
       font-weight: 700;
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      font-size: 2.1rem;
+      text-align: center;
     }
-
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-control {
+      border-radius: 8px;
+      padding: 12px 15px;
+      border: 2px solid #DB783E;
+      background: #FBF5F0;
+      color: #142D25;
+      transition: all 0.3s ease;
+    }
+    .form-control:focus {
+      border-color: #024A43;
+      box-shadow: 0 0 0 0.25rem rgba(2, 74, 67, 0.13);
+      background: #F2E3D8;
+    }
     .login-link {
-      color: #4b6cb7;
+      color: #024A43;
       font-weight: 600;
       text-decoration: none;
       transition: all 0.2s ease;
     }
-
     .login-link:hover {
-      color: #2a4285;
+      color: #AA423A;
       text-decoration: underline;
     }
-
-    .form-control {
-      border-radius: 8px;
-      padding: 12px 15px;
-      border: 2px solid #e0e6ed;
-      transition: all 0.3s ease;
+    .text-center {
+      text-align: center;
     }
-
-    .form-control:focus {
-      border-color: #4b6cb7;
-      box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+    @media (max-width: 700px) {
+      .glass-sidebar {
+        width: 160px;
+      }
+      .glass-sidebar.open ~ .main-content {
+        margin-left: 160px;
+      }
+      .top-bar {
+        padding: 1.2rem 0.5rem 0.5rem 0.5rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .glass-card {
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+      }
+      .signup-title {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Background with animation -->
-  <div class="bg-overlay" id="overlay"></div>
-
-  <!-- Sign Up Form -->
-  <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card p-4 py-5">
-      <h2 class="text-center mb-4 signup-title">Create an Account</h2>
-      <form method="post" action="">
-        <div id="signupMessage" class="messageDiv" style="display:none;"></div> 
-        <input type="text" id="name" class="form-control mb-3" placeholder="Name" required />
-        <input type="email" id="email" class="form-control mb-3" placeholder="Email" required />
-        <input type="password" id="password" class="form-control mb-3" placeholder="Password" required />
-        <input type="text" id="location" class="form-control mb-3" placeholder="Location" />
-        <button type="submit" id="submit" class="btn btn-primary-custom w-100">Sign Up</button>
-      </form>
-      <div class="text-center mt-4 pt-3 border-top">
-        <p class="mb-0" style="color: #6c757d;">Already have an account?
-          <a href="login.html" class="login-link">Login</a>
-        </p>
+  <div class="glass-sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="logo.png" alt="Logo" /> EcoFinds
+    </div>
+    <nav>
+      <a href="contact.html">Contact</a>
+      <a href="my-listings.html">My Listings</a>
+      <a href="product.html">Product Page</a>
+      <a href="newitem.html">Add New Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="purchases.html">Previous Purchases</a>
+    </nav>
+    <a href="index.html" class="signout">Sign Out</a>
+  </div>
+  <div class="main-content" id="mainContent">
+    <div class="top-bar">
+      <button class="hamburger" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>
+      <div class="logo">
+        <img src="logo.png" alt="Logo" /> EcoFinds
+      </div>
+    </div>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100" style="z-index:1;">
+      <div class="glass-card">
+        <div class="avatar mx-auto mb-3">
+          <svg width="40" height="40" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="27" cy="27" r="27" fill="#024A43"/>
+            <ellipse cx="27" cy="23" rx="10" ry="10" fill="#FBF5F0"/>
+            <ellipse cx="27" cy="41" rx="15" ry="8" fill="#FBF5F0"/>
+          </svg>
+        </div>
+        <h2 class="signup-title">Create Your Account</h2>
+        <form id="signupForm">
+          <div class="form-group">
+            <input type="text" class="form-control" id="signupName" placeholder="Full Name" required />
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" id="signupEmail" placeholder="Email Address" required />
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="signupPassword" placeholder="Password" required />
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="signupConfirmPassword" placeholder="Confirm Password" required />
+          </div>
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary-custom">Sign Up</button>
+          </div>
+        </form>
+        <div class="text-center mt-3">
+          <span>Already have an account? <a href="login.html" class="login-link">Login</a></span>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Particles JS -->
   <script>
+    // Sidebar toggle logic
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const mainContent = document.getElementById('mainContent');
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      if (sidebar.classList.contains('open')) {
+        mainContent.style.marginLeft = sidebar.offsetWidth + 'px';
+      } else {
+        mainContent.style.marginLeft = '0';
+      }
+    });
+    // Close sidebar on click outside (for mobile UX)
+    document.addEventListener('click', function(e) {
+      if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+        sidebar.classList.remove('open');
+        mainContent.style.marginLeft = '0';
+      }
+    });
+    // Prevent closing when clicking inside sidebar
+    sidebar.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+    // Floating particles
     const overlay = document.getElementById('overlay');
-    for (let i = 0; i < 15; i++) {
-      const particle = document.createElement('div');
-      particle.classList.add('particle');
-      particle.style.width = `${Math.random() * 10 + 5}px`;
-      particle.style.height = particle.style.width;
-      particle.style.left = `${Math.random() * 100}%`;
-      particle.style.top = `${Math.random() * 100 + 100}%`;
-      particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
-      particle.style.animationDelay = `${Math.random() * 5}s`;
-      overlay.appendChild(particle);
+    if (overlay) {
+      for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.width = `${Math.random() * 10 + 5}px`;
+        particle.style.height = particle.style.width;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100 + 100}%`;
+        particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        overlay.appendChild(particle);
+      }
     }
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    // Signup form handling
+    document.getElementById("signupForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const name = document.getElementById("signupName").value;
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+      const confirmPassword = document.getElementById("signupConfirmPassword").value;
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      // Validate password strength
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters long!");
+        return;
+      }
+      try {
+        // Create user with Firebase Auth
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        // Save additional user data to Firestore
+        await firebase.firestore().collection('users').doc(user.uid).set({
+          name: name,
+          email: email,
+          greenPoints: 0,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("Account created successfully! Welcome to EcoFinds!");
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        console.error("Signup error:", error);
+        alert("Signup failed: " + error.message);
+      }
+    });
   </script>
 </body>
 </html>

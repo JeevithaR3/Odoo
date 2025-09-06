@@ -1,387 +1,750 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EcoSwap | Share • Swap • Earn GreenPoints</title>
-
-  <meta name="description"
-        content="EcoSwap is a sustainable sharing platform where you can give, swap, or lend everyday items, earn GreenPoints, and build community." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoFinds - Second-Hand Marketplace</title>
   <link rel="icon" href="./logo.png" type="image/x-icon">
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary  : '#4b6cb7',
-            secondary: '#3b5998',
-            accent   : '#5f86d2',
-            light    : '#b0c7f7',
-            dark     : '#2c3e91',
-          },
-          fontFamily: {
-            sans : ['Poppins', 'sans-serif'],
-            serif: ['Playfair Display', 'serif'],
-          },
-          animation: {
-            float: 'float 6s ease-in-out infinite',
-          },
-          keyframes: {
-            float: {
-              '0%,100%': { transform:'translateY(0)' },
-              '50%'   : { transform:'translateY(-14px)' }
-            }
-          }
-        }
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #FBF5F0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #142D25, #024A43);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+    }
+    
+    .navbar-brand {
+      color: #FBF5F0 !important;
+      font-weight: 700;
+      font-size: 1.8rem;
+      text-decoration: none;
+    }
+    
+    .navbar-brand:hover {
+      color: #FBF5F0 !important;
+    }
+    
+    .navbar-nav-left .nav-link {
+      color: #FBF5F0 !important;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+    }
+    
+    .navbar-nav-left .nav-link:hover {
+      color: #DB783E !important;
+    }
+    
+    .navbar-nav .nav-link {
+      color: #FBF5F0 !important;
+      font-weight: 500;
+      margin: 0 8px;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .navbar-nav .nav-link:hover {
+      color: #DB783E !important;
+      background-color: rgba(219, 120, 62, 0.1);
+    }
+    
+    .navbar-brand-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .navbar-nav-left {
+      position: absolute;
+      left: 1rem;
+    }
+    
+    @media (max-width: 991px) {
+      .navbar-brand-center {
+        position: static;
+        transform: none;
+        text-align: center;
+        margin: 1rem 0;
+      }
+      
+      .navbar-nav-left {
+        position: static;
+        margin-bottom: 1rem;
+      }
+      
+      .navbar-nav {
+        text-align: center;
       }
     }
-  </script>
-
-  <style>
-    .gradient-text{
-      background:linear-gradient(90deg,#4b6cb7 0%,#3b5998 100%);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
+    
+    .cart-badge {
+      position: relative;
     }
     
-    .gradient-bg{
-      background:linear-gradient(135deg,rgba(75,108,183,.10) 0%,rgba(59,89,152,.10) 100%);
-    }
-   
-    .hero-bg{
-      background:
-        radial-gradient(circle at top left,rgba(75,108,183,.15),transparent 60%),
-        radial-gradient(circle at bottom right,rgba(75,108,183,.10),transparent 60%);
+    .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #dc3545;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
-    .leaf-pattern{
-      background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54 50c-4-4-8-8-14-8s-10 4-14 8-8 8-8 14 4 10 8 14 8 8 14 8 10-4 14-8 8-8 8-14-4-10-8-14zM0 0h60v60H0V0zm20 20v20h20V20H20zm4 4h12v12H24V24z' fill='%234b6cb7' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    .top-banner {
+      background: linear-gradient(135deg, #024A43, #142D25);
+      color: white;
+      padding: 0.75rem 0;
+      font-size: 0.9rem;
     }
     
-    .dark .gradient-bg {
-      background: linear-gradient(135deg, rgba(75, 108, 183, 0.2) 0%, rgba(59, 89, 152, 0.2) 100%);
+    .hero-section {
+      background: linear-gradient(135deg, #FBF5F0 0%, #F2E3D8 100%);
+      padding: 4rem 0;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
     }
-    .dark .hero-bg {
-      background:
-        radial-gradient(circle at top left, rgba(75, 108, 183, 0.25), transparent 60%),
-        radial-gradient(circle at bottom right, rgba(75, 108, 183, 0.2), transparent 60%);
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
     }
-    .dark .leaf-pattern {
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54 50c-4-4-8-8-14-8s-10 4-14 8-8 8-8 14 4 10 8 14 8 8 14 8 10-4 14-8 8-8 8-14-4-10-8-14zM0 0h60v60H0V0zm20 20v20h20V20H20zm4 4h12v12H24V24z' fill='%234b6cb7' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .hero-image {
+      position: relative;
+    }
+    
+    .hero-image img {
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .search-container {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-top: -50px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .search-bar {
+      border: 2px solid #DB783E;
+      border-radius: 25px;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+    }
+    
+    .search-bar:focus {
+      border-color: #024A43;
+      box-shadow: 0 0 0 0.2rem rgba(2, 74, 67, 0.25);
+    }
+    
+    .filter-btn {
+      background: #024A43;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .filter-btn:hover {
+      background: #142D25;
+      transform: translateY(-2px);
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #142D25;
+      margin-bottom: 1rem;
+    }
+    
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 0;
+    }
+    
+    .deals-section {
+      padding: 4rem 0;
+      background: #F8F9FA;
+    }
+    
+    .categories-section {
+      padding: 4rem 0;
+      background: white;
+    }
+    
+    .modern-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      height: 100%;
+    }
+    
+    .modern-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .category-image {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .category-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .modern-card:hover .category-image img {
+      transform: scale(1.05);
+    }
+    
+    .category-content {
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .category-content h4 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #142D25;
+      margin-bottom: 0.5rem;
+    }
+    
+    .category-content p {
+      color: #666;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .product-image {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #dc3545;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .product-content {
+      padding: 1.5rem;
+    }
+    
+    .product-content h5 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #142D25;
+      margin-bottom: 0.75rem;
+    }
+    
+    .product-price {
+      margin-bottom: 0.75rem;
+    }
+    
+    .current-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #024A43;
+    }
+    
+    .original-price {
+      font-size: 1rem;
+      color: #999;
+      text-decoration: line-through;
+      margin-left: 0.5rem;
+    }
+    
+    .product-description {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    
+    .banner-section {
+      background: linear-gradient(135deg, #DB783E, #AA423A);
+      color: white;
+      padding: 3rem 0;
+      text-align: center;
+    }
+    
+    .footer {
+      background: #142D25;
+      color: #FBF5F0;
+      padding: 2rem 0;
+    }
+    
+    .footer-logo {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .mobile-nav {
+      display: none;
+      background: #142D25;
+      padding: 1rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+    
+    .mobile-nav-item {
+      color: #FBF5F0;
+      text-decoration: none;
+      text-align: center;
+      flex: 1;
+    }
+    
+    .mobile-nav-item i {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-nav {
+        display: flex;
+        justify-content: space-around;
+      }
+      
+      .search-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      
+      .hero-section {
+        min-height: 40vh;
+      }
     }
   </style>
 </head>
-
-<body class="font-sans text-gray-800 antialiased scroll-smooth dark:bg-gray-900 dark:text-gray-200">
-
-<nav class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur shadow-sm dark:bg-gray-800/90">
-  <div class="container mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="#" class="flex items-center space-x-3">
-      <img src="./logo.png" alt="EcoSwap logo" class="h-12 sm:h-16 w-auto">
-      <span class="text-xl sm:text-2xl font-bold gradient-text">EcoSwap</span>
-    </a>
-
-    <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
-
-    <div class="hidden md:flex items-center space-x-8">
-      <a href="#workflow" class="font-medium hover:text-primary dark:hover:text-light">How&nbsp;It&nbsp;Works</a>
-      <a href="#rewards" class="font-medium hover:text-primary dark:hover:text-light">GreenPoints <span class="text-green-500">🌿</span></a>
-      <a href="dashboard.html" class="font-medium hover:text-primary dark:hover:text-light">Dashboard</a>
-    </div>
-
-    <div class="flex items-center space-x-4">
-      <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
-        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-        </svg>
-        <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-        </svg>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <!-- Left side - Cart and Profile -->
+      <div class="navbar-nav-left d-flex align-items-center">
+        <a class="nav-link cart-badge me-3" href="cart.html">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="badge">1</span>
+        </a>
+        <a class="nav-link" href="dashboard.html">
+          <i class="fas fa-user-circle"></i>
+        </a>
+      </div>
+      
+      <!-- Center - Logo -->
+      <div class="navbar-brand-center">
+        <a class="navbar-brand" href="home.html">
+          <img src="./logo.png" alt="EcoFinds" width="50" height="50" class="me-2">
+          EcoFinds
+        </a>
+      </div>
+      
+      <!-- Right side - Navigation Menu -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
       </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="my-listings.html">My Listings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="newitem.html">Add Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="productspage.html">Products Page</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cart.html">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="purchases.html">Previous Purchases</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-      <div id="user-dropdown" class="items-center space-x-2">
-        <div class="relative">
-          <button class="flex items-center space-x-2 focus:outline-none">
-            <span class="font-medium">User</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden dropdown-menu dark:bg-gray-700">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 logout-btn">Logout</a>
+  <!-- Top Banner -->
+  <div class="top-banner">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="mb-0">🌿 Get 50% Off on Selected Eco Items | Shop Now</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <div class="d-flex justify-content-md-end align-items-center">
+            <span class="me-3">📞 +001234567890</span>
+            <span class="me-3">📍 Location: New York, USA</span>
+            <span>🌐 English</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg py-4 px-6">
-    <div class="flex flex-col space-y-4">
-      <a href="#workflow" class="font-medium hover:text-primary dark:hover:text-light">How It Works</a>
-      <a href="#rewards" class="font-medium hover:text-primary dark:hover:text-light">GreenPoints 🌿</a>
-      <a href="dashboard.html" class="font-medium hover:text-primary dark:hover:text-light">Dashboard</a>
-      <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-        <a href="#" class="block font-medium hover:text-primary dark:hover:text-light logout-btn">Logout</a>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="hero-title">
+            <span class="text-primary">shopping and</span><br>
+            <span class="text-success">department store.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Shopping is a bit of a relaxing hobby for me, which is sometimes troubling for the bank balance. 
+            But with EcoFinds, every purchase helps the planet!
+          </p>
+          <a href="productspage.html" class="btn btn-primary btn-lg px-5 py-3 me-3">Learn More</a>
+          <a href="signup.html" class="btn btn-outline-light btn-lg px-5 py-3">Get Started</a>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80" alt="Sustainable Shopping" class="img-fluid rounded">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search and Filter Section -->
+  <div class="container">
+    <div class="search-container">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" class="form-control search-bar" placeholder="Search for items...">
+            <button class="btn btn-warning" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0">
+          <div class="d-flex flex-wrap">
+            <button class="btn filter-btn">Filter</button>
+            <button class="btn filter-btn">Group By</button>
+            <button class="btn filter-btn">Sort</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</nav>
 
-<section class="pt-24 md:pt-32 pb-16 md:pb-24 gradient-bg leaf-pattern hero-bg relative overflow-hidden">
-  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center">
-    
-    <div class="lg:w-1/2 lg:pr-6 mb-12 lg:mb-0">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-6">
-        <span class="gradient-text">Share More,</span><br>Waste Less.
-      </h1>
-
-      <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 sm:mb-10 max-w-lg">
-        Give, swap or lend everyday items with people nearby and earn
-        <strong>GreenPoints <span class="text-green-500">🌿</span></strong> for every eco-friendly exchange.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-4">
-        <a href="#workflow" class="px-6 sm:px-8 py-3 border-2 border-primary text-primary rounded-full font-medium hover:bg-primary/10 transition flex items-center justify-center gap-2 dark:text-light dark:border-light dark:hover:bg-gray-700">
-          <span>How&nbsp;It&nbsp;Works</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M9 5l7 7-7 7"/>
-          </svg>
-        </a>
+  <!-- Today's Best Deals Section -->
+  <section class="deals-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="section-title">Today's Best Deals for you!</h2>
+        <p class="section-subtitle">Amazing discounts on pre-owned items</p>
       </div>
-    </div>
-
-    <div class="lg:w-1/2 relative mt-8 lg:mt-0">
-      <div class="relative z-10 max-w-lg mx-auto">
-        <img src="./bg.png"
-             alt="People swapping items" class="rounded-2xl shadow-2xl" loading="lazy">
-      </div>
-      <div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full hidden lg:block"></div>
-      <div class="absolute -bottom-12 -right-12 w-20 h-20 bg-accent/10 rounded-full hidden lg:block"></div>
-    </div>
-  </div>
-</section>
-
-<section class="py-12 md:py-16 bg-white dark:bg-gray-800">
-  <div class="container mx-auto px-6">
-    <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-      <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">
-        Why Choose <span class="gradient-text">EcoSwap</span>
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-300">The sustainable way to share resources in your community.</p>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
       
-      <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mb-4 sm:mb-6 flex items-center justify-center bg-primary/10 rounded-full">
-          <svg class="w-7 h-7 sm:w-8 sm:h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M21 16V8a2 2 0 0 0-2-2h-4M3 8v8a2 2 0 0 0 2 2h4M7 21v-6M17 3v6"/>
-          </svg>
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80" alt="MacBook Pro">
+              <div class="product-badge">50% OFF</div>
+            </div>
+            <div class="product-content">
+              <h5>MacBook Pro 13"</h5>
+              <div class="product-price">
+                <span class="current-price">$400</span>
+                <span class="original-price">$800</span>
+              </div>
+              <p class="product-description">Excellent condition MacBook Pro</p>
+              <button class="btn btn-primary w-100">Add to Cart</button>
+            </div>
+          </div>
         </div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Easy Listings</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Post an item in seconds with photos, categories, and location tags.</p>
-      </div>
-
-      <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mb-4 sm:mb-6 flex items-center justify-center bg-primary/10 rounded-full">
-          <svg class="w-7 h-7 sm:w-8 sm:h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M9 12l2 2 4-4M21 12A9 9 0 1 1 12 3"/>
-          </svg>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=400&q=80" alt="Design Book">
+              <div class="product-badge">30% OFF</div>
+            </div>
+            <div class="product-content">
+              <h5>Design Patterns Book</h5>
+              <div class="product-price">
+                <span class="current-price">$18</span>
+                <span class="original-price">$25</span>
+              </div>
+              <p class="product-description">Essential reading for developers</p>
+              <button class="btn btn-primary w-100">Add to Cart</button>
+            </div>
+          </div>
         </div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">GreenPoint Rewards</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Earn points when your swap is confirmed (+10) and completed (+20).</p>
-      </div>
-
-      <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mb-4 sm:mb-6 flex items-center justify-center bg-primary/10 rounded-full">
-          <svg class="w-7 h-7 sm:w-8 sm:h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M7 20v-2a3 3 0 0 1 5.356-1.857M15 7a3 3 0 1 1-6 0"/>
-          </svg>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=400&q=80" alt="Denim Jacket">
+              <div class="product-badge">40% OFF</div>
+            </div>
+            <div class="product-content">
+              <h5>Vintage Denim Jacket</h5>
+              <div class="product-price">
+                <span class="current-price">$27</span>
+                <span class="original-price">$45</span>
+              </div>
+              <p class="product-description">Classic vintage style</p>
+              <button class="btn btn-primary w-100">Add to Cart</button>
+            </div>
+          </div>
         </div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Connect</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Coordinate pickup times securely without sharing personal info.</p>
-      </div>
-
-      <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mb-4 sm:mb-6 flex items-center justify-center bg-primary/10 rounded-full">
-          <svg class="w-7 h-7 sm:w-8 sm:h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M3 5h18M9 3v2m6-2v2M3 10h18M5 15h14M7 20h10"/>
-          </svg>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="product-card">
+            <div class="product-image">
+              <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Wooden Chair">
+              <div class="product-badge">25% OFF</div>
+            </div>
+            <div class="product-content">
+              <h5>Wooden Dining Chair</h5>
+              <div class="product-price">
+                <span class="current-price">$56</span>
+                <span class="original-price">$75</span>
+              </div>
+              <p class="product-description">Solid wood construction</p>
+              <button class="btn btn-primary w-100">Add to Cart</button>
+            </div>
+          </div>
         </div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Personal Dashboard</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Track your listings, requests, messages & GreenPoints in one view.</p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="workflow" class="py-16 md:py-24 hero-bg">
-  <div class="container mx-auto px-6">
-    <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-      <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">
-        How <span class="gradient-text">EcoSwap</span> Works
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-300">Join the circular economy in four simple steps.</p>
-    </div>
-
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10">
+  <!-- Popular Categories Section -->
+  <section class="categories-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="section-title">Shop our top categories</h2>
+        <p class="section-subtitle">Discover amazing pre-owned items across different categories</p>
+      </div>
       
-      <div class="text-center">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 bg-primary text-white rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">1</div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Sign Up / Log In</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Create your profile with location & interests.</p>
-      </div>
-
-      <div class="text-center">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 bg-primary text-white rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">2</div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Add or Request Items</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Post what you have or need with photos & condition.</p>
-      </div>
-
-      <div class="text-center">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 bg-primary text-white rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">3</div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Meet</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Pick a convenient meetup spot.</p>
-      </div>
-
-      <div class="text-center">
-        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 bg-primary text-white rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">4</div>
-        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Swap & Earn</h3>
-        <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Confirm, rate the experience & collect GreenPoints.</p>
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=400&q=80" alt="Electronics">
+            </div>
+            <div class="category-content">
+              <h4>Electronics</h4>
+              <p>240 Items Available</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=400&q=80" alt="Fashion">
+            </div>
+            <div class="category-content">
+              <h4>Fashion</h4>
+              <p>180 Items Available</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=400&q=80" alt="Books">
+            </div>
+            <div class="category-content">
+              <h4>Books</h4>
+              <p>320 Items Available</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Furniture">
+            </div>
+            <div class="category-content">
+              <h4>Furniture</h4>
+              <p>150 Items Available</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=400&q=80" alt="Gaming">
+            </div>
+            <div class="category-content">
+              <h4>Gaming</h4>
+              <p>95 Items Available</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=400&q=80" alt="Sports">
+            </div>
+            <div class="category-content">
+              <h4>Sports</h4>
+              <p>120 Items Available</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80" alt="Beauty">
+            </div>
+            <div class="category-content">
+              <h4>Beauty</h4>
+              <p>85 Items Available</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="category-card modern-card">
+            <div class="category-image">
+              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Travel">
+            </div>
+            <div class="category-content">
+              <h4>Travel</h4>
+              <p>110 Items Available</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="rewards" class="py-16 md:py-24 bg-primary text-white relative overflow-hidden">
-  <div class="absolute inset-0 opacity-25" style="background:radial-gradient(circle at center,rgba(255,255,255,.15),transparent 70%);"></div>
-
-  <div class="container mx-auto px-6 relative z-10">
-    <div class="flex flex-col lg:flex-row items-center">
-      <div class="lg:w-2/3 mb-8 lg:mb-0">
-        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">
-          Earn GreenPoints <span class="text-green-300">🌿</span> for every eco-friendly act
-        </h2>
-        <p class="text-lg mb-6 md:mb-8">
-          +10 points when someone contacts you &mdash; plus a bonus +20 when the exchange is completed.
-        </p>
-      </div>
-      <div class="lg:w-1/3 flex justify-center lg:justify-end">
-        <a href="dashboard.html" class="inline-block px-8 sm:px-10 py-3 sm:py-4 bg-white text-primary rounded-full font-semibold shadow hover:shadow-lg transition">
-          View Dashboard &rarr;
-        </a>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="d-flex align-items-center mb-3">
+            <img src="./logo.png" alt="EcoFinds" class="footer-logo me-3">
+            <h5 class="mb-0">EcoFinds</h5>
+          </div>
+          <p class="mb-0">Your trusted marketplace for sustainable second-hand goods.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0">&copy; 2024 EcoFinds. All rights reserved.</p>
+        </div>
       </div>
     </div>
+  </footer>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <a href="home.html" class="mobile-nav-item">
+      <i class="fas fa-home"></i>
+      <div>Home</div>
+    </a>
+    <a href="browse.html" class="mobile-nav-item">
+      <i class="fas fa-th"></i>
+      <div>Browse</div>
+    </a>
+    <a href="cart.html" class="mobile-nav-item">
+      <i class="fas fa-shopping-cart"></i>
+      <div>Cart</div>
+    </a>
+    <a href="dashboard.html" class="mobile-nav-item">
+      <i class="fas fa-user"></i>
+      <div>Profile</div>
+    </a>
   </div>
-</section>
 
-<footer class="bg-dark text-white py-12">
-  <div class="container mx-auto px-6">
-    <div class="flex flex-col md:flex-row md:justify-between gap-8">
-      <div>
-        <h3 class="text-2xl font-bold gradient-text mb-3">EcoSwap</h3>
-        <p class="text-sm text-gray-300">Building a world where sharing beats buying.</p>
-      </div>
-
-      <div class="space-y-2">
-        <a href="#workflow" class="block hover:text-light">How&nbsp;It&nbsp;Works</a>
-        <a href="#rewards"  class="block hover:text-light">GreenPoints <span class="text-green-400">🌿</span></a>
-      </div>
-
-      <div class="space-y-2">
-        <a href="#" class="block hover:text-light">Contact Us</a>
-      </div>
-    </div>
-
-    <p class="mt-10 text-center text-xs text-gray-400">
-      &copy; <span id="year"></span> EcoSwap. All rights reserved.
-    </p>
-  </div>
-</footer>
-
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const t = document.querySelector(a.getAttribute('href'));
-      if (t) {
-        e.preventDefault();
-        t.scrollIntoView({ behavior: 'smooth' });
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Search functionality
+    document.querySelector('.search-bar').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const searchTerm = this.value;
+        if (searchTerm.trim()) {
+          window.location.href = `browse.html?search=${encodeURIComponent(searchTerm)}`;
+        }
       }
     });
-  });
-  
-  const themeToggleBtn = document.getElementById('theme-toggle');
-  const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-  const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-  if (localStorage.getItem('color-theme') === 'dark' || 
-      (!localStorage.getItem('color-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark');
-    themeToggleLightIcon.classList.remove('hidden');
-  } else {
-    document.documentElement.classList.remove('dark');
-    themeToggleDarkIcon.classList.remove('hidden');
-  }
-
-  themeToggleBtn.addEventListener('click', function() {
-    themeToggleDarkIcon.classList.toggle('hidden');
-    themeToggleLightIcon.classList.toggle('hidden');
-    
-    if (document.documentElement.classList.contains('dark')) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('color-theme', 'light');
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('color-theme', 'dark');
-    }
-  });
-
-  document.querySelector('#user-dropdown button')?.addEventListener('click', function() {
-    document.querySelector('.dropdown-menu').classList.toggle('hidden');
-  });
-
-  document.querySelector('.logout-btn')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.location.href = 'index.html';
-  });
-
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-
-  if (mobileMenuButton && mobileMenu) {
-    mobileMenuButton.addEventListener('click', function() {
-      mobileMenu.classList.toggle('hidden');
+    // Category card click handlers
+    document.querySelectorAll('.category-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const category = this.querySelector('h4').textContent;
+        window.location.href = `browse.html?category=${encodeURIComponent(category)}`;
+      });
     });
-  
-    document.addEventListener('click', function(event) {
-      if (!mobileMenu.contains(event.target) && event.target !== mobileMenuButton) {
-        mobileMenu.classList.add('hidden');
-      }
-    });
-  }
-  
-  document.addEventListener('click', function(event) {
-    const dropdown = document.querySelector('.dropdown-menu');
-    const dropdownBtn = document.querySelector('#user-dropdown button');
-    if (dropdown && dropdownBtn && !dropdown.contains(event.target) && !dropdownBtn.contains(event.target)) {
-      dropdown.classList.add('hidden');
-    }
-  });
-</script>
+  </script>
 </body>
 </html>

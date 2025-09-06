@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoFinds Color Palette</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+  :root {
+    --silver-bird: #FBF5F0;
+    --guerrilla-forest: #142D25;
+    --soft-sunset: #F2E3D8;
+    --holy-cannoli: #DB783E;
+    --rum-punch: #AA423A;
+    --tropical-forest: #024A43;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #fdf6f0, #e0e0e0); display:flex; justify-content:center; align-items:center; min-height:100vh; }
+
+  .palette-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+    width: 90%;
+    max-width: 1000px;
+  }
+
+  .color-card {
+    position: relative;
+    border-radius: 20px;
+    padding: 2rem;
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .color-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+  }
+
+  .color-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .color-hex { font-size: 0.9rem; opacity: 0.8; }
+
+  /* Specific Colors */
+  .silver-bird { background: var(--silver-bird); color: var(--tropical-forest); }
+  .guerrilla-forest { background: var(--guerrilla-forest); }
+  .soft-sunset { background: var(--soft-sunset); color: var(--tropical-forest); }
+  .holy-cannoli { background: var(--holy-cannoli); }
+  .rum-punch { background: var(--rum-punch); }
+  .tropical-forest { background: var(--tropical-forest); }
+
+  /* Optional gradient overlay for depth */
+  .color-card::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.05));
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<div class="palette-container">
+  <div class="color-card silver-bird">
+    <div class="color-name">Silver Bird</div>
+    <div class="color-hex">#FBF5F0</div>
+  </div>
+  <div class="color-card guerrilla-forest">
+    <div class="color-name">Guerrilla Forest</div>
+    <div class="color-hex">#142D25</div>
+  </div>
+  <div class="color-card soft-sunset">
+    <div class="color-name">Soft Sunset</div>
+    <div class="color-hex">#F2E3D8</div>
+  </div>
+  <div class="color-card holy-cannoli">
+    <div class="color-name">Holy Cannoli</div>
+    <div class="color-hex">#DB783E</div>
+  </div>
+  <div class="color-card rum-punch">
+    <div class="color-name">Rum Punch</div>
+    <div class="color-hex">#AA423A</div>
+  </div>
+  <div class="color-card tropical-forest">
+    <div class="color-name">Tropical Forest</div>
+    <div class="color-hex">#024A43</div>
+  </div>
+</div>
+
+</body>
+</html>
