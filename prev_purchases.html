@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoFinds | Previous Purchases</title>
+  <link rel="icon" href="logo_ecofinds.png" type="image/x-icon">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --silver-bird: #FBF5F0;
+      --soft-sunset: #F2E3D8;
+      --guerrilla-forest: #142D25;
+      --tropical-forest: #024A43;
+      --holy-cannoli: #DB783E;
+      --rum-punch: #AA423A;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, rgba(219,120,62,0.55) 0%, rgba(242,227,216,0.45) 60%, rgba(2,74,67,0.22) 100%);
+      background-size: cover;
+      background-position: center center;
+      color: var(--guerrilla-forest);
+    }
+    .main-wrapper {
+      max-width: 600px;
+      margin: 40px auto 0 auto;
+      background: rgba(242,227,216,0.85);
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(20,45,37,0.13);
+      padding: 2.2rem 1.5rem 2rem 1.5rem;
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1.5px solid rgba(219, 120, 62, 0.18);
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--guerrilla-forest);
+    }
+    .logo img {
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .top-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .cart-icon {
+      position: relative;
+      font-size: 1.5rem;
+      background: var(--holy-cannoli);
+      color: var(--silver-bird);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--rum-punch);
+      color: var(--silver-bird);
+      font-size: 0.8rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      border: 2px solid var(--silver-bird);
+    }
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--tropical-forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--silver-bird);
+      font-size: 1.3rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .page-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--guerrilla-forest);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .search-bar {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border: 2px solid var(--holy-cannoli);
+      border-radius: 14px;
+      font-size: 1.08rem;
+      background: var(--silver-bird);
+      color: var(--guerrilla-forest);
+      outline: none;
+      margin-bottom: 1.1rem;
+      transition: border 0.2s;
+    }
+    .search-bar:focus {
+      border-color: var(--tropical-forest);
+    }
+    .sort-group-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      justify-content: flex-start;
+    }
+    .sort-group-btn {
+      background: var(--holy-cannoli);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.3rem;
+      border-radius: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.05rem;
+    }
+    .sort-group-btn:hover, .sort-group-btn.active {
+      background: var(--tropical-forest);
+      color: #fff;
+    }
+    .purchases-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .purchase-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      background: rgba(255,255,255,0.18);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(2,74,67,0.10);
+      padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+      border: 1.5px solid rgba(2,74,67,0.13);
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+    .purchase-card:hover {
+      box-shadow: 0 8px 32px rgba(2,74,67,0.18);
+      background: rgba(255,255,255,0.28);
+    }
+    .purchase-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
+      background: var(--soft-sunset);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .purchase-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .purchase-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      justify-content: center;
+    }
+    .purchase-name {
+      font-size: 1.13rem;
+      font-weight: 600;
+      color: var(--guerrilla-forest);
+    }
+    .purchase-price {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--holy-cannoli);
+    }
+    .purchase-category {
+      font-size: 0.98rem;
+      color: var(--tropical-forest);
+      font-weight: 500;
+    }
+    .purchase-seller {
+      font-size: 0.93rem;
+      color: var(--guerrilla-forest);
+      opacity: 0.7;
+    }
+    @media (max-width: 700px) {
+      .main-wrapper {
+        max-width: 100%;
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+      }
+      .purchase-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .purchase-img {
+        width: 100%;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="top-bar">
+      <div class="logo mx-auto" style="font-weight:700;font-size:1.3rem;color:#142D25;display:flex;align-items:center;gap:0.5rem;">
+        <img src="logo_ecofinds.png" alt="Logo" style="height:40px;width:40px;border-radius:50%;object-fit:cover;"> EcoFinds
+      </div>
+      <div class="top-icons" style="position:absolute; right:1.5rem; display:flex; align-items:center; gap:1.2rem;">
+        <a href="cart.html" class="cart-icon" style="text-decoration:none;">
+          🛒
+          <span class="cart-badge">1</span>
+        </a>
+        <a href="dashboard.html" class="avatar" style="text-decoration:none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="8" r="4" fill="#FBF5F0"/>
+            <ellipse cx="12" cy="17" rx="7" ry="5" fill="#FBF5F0"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="page-title">Previous Purchases</div>
+    <input type="text" class="search-bar" placeholder="Search ..." id="searchBar" />
+    <div class="sort-group-row">
+      <button class="sort-group-btn" id="sortBtn"><i class="fas fa-sort"></i>Sort</button>
+      <button class="sort-group-btn" id="filterBtn"><i class="fas fa-filter"></i>Filter</button>
+      <button class="sort-group-btn" id="groupBtn"><i class="fas fa-layer-group"></i>Group By</button>
+    </div>
+    <div class="purchases-list" id="purchasesList">
+      <!-- Purchases will be loaded here -->
+    </div>
+  </div>
+  <script>
+    // Sample purchases data
+    const purchases = [
+      {
+        name: 'MacBook Pro 13"',
+        price: 800,
+        category: 'Electronics',
+        seller: 'Akshat Sinha',
+        image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop'
+      },
+      {
+        name: 'Design Patterns Book',
+        price: 25,
+        category: 'Books',
+        seller: 'Priya Sharma',
+        image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=300&fit=crop'
+      },
+      {
+        name: 'Vintage Denim Jacket',
+        price: 45,
+        category: 'Fashion',
+        seller: 'Jubilant Swan',
+        image: 'https://images.unsplash.com/photo-1551028719-001c4d5a0c27?w=300&h=300&fit=crop'
+      }
+    ];
+    function renderPurchases(list) {
+      const container = document.getElementById('purchasesList');
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center;opacity:0.7;">No purchases found.</div>';
+        return;
+      }
+      container.innerHTML = list.map(p => `
+        <div class="purchase-card">
+          <div class="purchase-img">
+            <img src="${p.image}" alt="${p.name}" />
+          </div>
+          <div class="purchase-details">
+            <div class="purchase-name">${p.name}</div>
+            <div class="purchase-price">$${p.price}</div>
+            <div class="purchase-category">${p.category}</div>
+            <div class="purchase-seller">${p.seller}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    renderPurchases(purchases);
+    // Search functionality
+    document.getElementById('searchBar').addEventListener('input', function() {
+      const val = this.value.toLowerCase();
+      renderPurchases(purchases.filter(p =>
+        p.name.toLowerCase().includes(val) ||
+        p.category.toLowerCase().includes(val) ||
+        p.seller.toLowerCase().includes(val)
+      ));
+    });
+  </script>
+</body>
+</html>

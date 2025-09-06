@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings - EcoFinds</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --tropical-forest: #024A43;
+            --holy-cannoli: #DB783E;
+            --rum-punch: #AA423A;
+            --guerrilla-forest: #2C3E50;
+            --cream: #F5F5DC;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FBF5F0 0%, #F2E3D8 100%);
+            min-height: 100vh;
+            color: var(--guerrilla-forest);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--holy-cannoli), var(--rum-punch));
+            border-bottom: 2px solid var(--rum-punch);
+            box-shadow: 0 4px 20px rgba(219, 120, 62, 0.3);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hamburger-menu {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .hamburger-menu:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Hamburger Menu Dropdown */
+        .hamburger-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 2px solid var(--rum-punch);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(219, 120, 62, 0.3);
+            padding: 1rem 0;
+            min-width: 250px;
+            z-index: 1001;
+            display: none;
+            animation: slideDown 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .hamburger-dropdown.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: var(--guerrilla-forest);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(219, 120, 62, 0.1);
+            border-left-color: var(--rum-punch);
+            color: var(--rum-punch);
+        }
+
+        .menu-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: white;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-icon {
+            position: relative;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--rum-punch);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .profile-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--tropical-forest);
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--tropical-forest), var(--holy-cannoli));
+            border-radius: 2px;
+        }
+
+        .add-new-btn {
+            background: linear-gradient(135deg, var(--holy-cannoli), var(--rum-punch));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(219, 120, 62, 0.3);
+        }
+
+        .add-new-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(219, 120, 62, 0.4);
+        }
+
+        /* Search Section */
+        .search-section {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(2, 74, 67, 0.4);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(2, 74, 67, 0.2);
+            display: flex;
+            gap: 1.5rem;
+            justify-content: flex-start;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(2, 74, 67, 0.05), rgba(219, 120, 62, 0.05));
+            z-index: 0;
+        }
+
+        .search-section > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .sort-group-btn {
+            background: var(--tropical-forest);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.05rem;
+            box-shadow: 0 4px 15px rgba(2, 74, 67, 0.3);
+        }
+
+        .sort-group-btn:hover, .sort-group-btn.active {
+            background: var(--holy-cannoli);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(2, 74, 67, 0.4);
+        }
+
+        /* Listings Grid */
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .listing-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(2, 74, 67, 0.3);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(2, 74, 67, 0.2);
+            display: flex;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .listing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(2, 74, 67, 0.05), rgba(219, 120, 62, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .listing-card:hover::before {
+            opacity: 1;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(2, 74, 67, 0.4);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: var(--tropical-forest);
+        }
+
+        .listing-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .listing-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .listing-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .listing-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--guerrilla-forest);
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--holy-cannoli);
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-category {
+            font-size: 0.9rem;
+            color: var(--tropical-forest);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .listing-status {
+            font-size: 0.9rem;
+            color: var(--guerrilla-forest);
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .listing-seller {
+            font-size: 0.8rem;
+            color: var(--guerrilla-forest);
+            opacity: 0.7;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(2, 74, 67, 0.2);
+            color: var(--tropical-forest);
+            border: 1px solid rgba(2, 74, 67, 0.3);
+        }
+
+        .status-sold {
+            background: rgba(170, 66, 58, 0.2);
+            color: var(--rum-punch);
+            border: 1px solid rgba(170, 66, 58, 0.3);
+        }
+
+        .status-pending {
+            background: rgba(219, 120, 62, 0.2);
+            color: var(--holy-cannoli);
+            border: 1px solid rgba(219, 120, 62, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--guerrilla-forest);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--holy-cannoli);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .listing-card {
+                flex-direction: column;
+            }
+            
+            .listing-image {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="hamburger-menu">
+                <i class="fas fa-bars"></i>
+                <div class="hamburger-dropdown">
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-info-circle"></i>
+                        About
+                    </a>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-envelope"></i>
+                        Contact
+                    </a>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-list"></i>
+                        My Listings
+                    </a>
+                    <a href="newitem.html" class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        Add New Item
+                    </a>
+                    <a href="landing.html" class="menu-item">
+                        <i class="fas fa-th-large"></i>
+                        Product Page
+                    </a>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart
+                    </a>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-history"></i>
+                        Previous Purchases
+                    </a>
+                </div>
+            </div>
+            
+            <a href="home.html" class="logo">
+                <img src="./logo_ecofinds.png" alt="EcoFinds Logo">
+                EcoFinds
+            </a>
+            
+            <div class="nav-right">
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge">1</span>
+                </div>
+                <div class="profile-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">My Listings</h1>
+                <button class="add-new-btn" onclick="addNewItem()">
+                    <i class="fas fa-plus"></i>
+                    Add New
+                </button>
+            </div>
+
+            <!-- Search Section -->
+            <section class="search-section">
+                <button class="sort-group-btn" id="sortBtn"><i class="fas fa-sort"></i>Sort</button>
+                <button class="sort-group-btn" id="filterBtn"><i class="fas fa-filter"></i>Filter</button>
+                <button class="sort-group-btn" id="groupBtn"><i class="fas fa-layer-group"></i>Group By</button>
+            </section>
+
+            <!-- Listings Grid -->
+            <div class="listings-grid" id="listingsGrid">
+                <!-- Listings will be dynamically loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample listings data
+        const listings = [
+            {
+                id: 1,
+                name: 'MacBook Pro 13"',
+                price: 800,
+                category: 'Electronics',
+                status: 'active',
+                seller: 'You',
+                image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop',
+                date: '2024-01-15'
+            },
+            {
+                id: 2,
+                name: 'Design Patterns Book',
+                price: 25,
+                category: 'Books',
+                status: 'sold',
+                seller: 'You',
+                image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=300&fit=crop',
+                date: '2024-01-10'
+            },
+            {
+                id: 3,
+                name: 'Vintage Denim Jacket',
+                price: 45,
+                category: 'Fashion',
+                status: 'pending',
+                seller: 'You',
+                image: 'https://images.unsplash.com/photo-1551028719-001c4d5a0c27?w=300&h=300&fit=crop',
+                date: '2024-01-12'
+            },
+            {
+                id: 4,
+                name: 'Wooden Dining Chair',
+                price: 75,
+                category: 'Furniture',
+                status: 'active',
+                seller: 'You',
+                image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop',
+                date: '2024-01-08'
+            },
+            {
+                id: 5,
+                name: 'PlayStation 4',
+                price: 200,
+                category: 'Gaming',
+                status: 'active',
+                seller: 'You',
+                image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=300&h=300&fit=crop',
+                date: '2024-01-14'
+            },
+            {
+                id: 6,
+                name: 'Mountain Bike',
+                price: 350,
+                category: 'Sports',
+                status: 'sold',
+                seller: 'You',
+                image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop',
+                date: '2024-01-11'
+            }
+        ];
+
+        let currentFilter = 'all';
+        let filteredListings = [...listings];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderListings();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Hamburger menu
+            document.querySelector('.hamburger-menu').addEventListener('click', function(e) {
+                e.stopPropagation();
+                const dropdown = document.querySelector('.hamburger-dropdown');
+                dropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                const dropdown = document.querySelector('.hamburger-dropdown');
+                dropdown.classList.remove('show');
+            });
+
+            // Cart functionality
+            document.querySelector('.cart-icon').addEventListener('click', function() {
+                alert('Cart clicked! This would open the shopping cart.');
+            });
+
+            // Profile functionality
+            document.querySelector('.profile-icon').addEventListener('click', function() {
+                alert('Profile clicked! This would open the user profile.');
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    filterListings();
+                });
+            });
+
+            // Search functionality
+            document.querySelector('#searchBar').addEventListener('input', function() {
+                searchListings(this.value);
+            });
+        }
+
+        function filterListings() {
+            if (currentFilter === 'all') {
+                filteredListings = [...listings];
+            } else {
+                filteredListings = listings.filter(listing => listing.status === currentFilter);
+            }
+            renderListings();
+        }
+
+        function searchListings(searchTerm) {
+            if (searchTerm.trim() === '') {
+                filterListings();
+                return;
+            }
+            
+            const searchLower = searchTerm.toLowerCase();
+            filteredListings = listings.filter(listing => 
+                listing.name.toLowerCase().includes(searchLower) ||
+                listing.category.toLowerCase().includes(searchLower) ||
+                listing.status.toLowerCase().includes(searchLower)
+            );
+            renderListings();
+        }
+
+        function renderListings() {
+            const listingsGrid = document.getElementById('listingsGrid');
+            
+            if (filteredListings.length === 0) {
+                listingsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h3>No listings found</h3>
+                        <p>You don't have any listings matching your current filter.</p>
+                        <button class="add-new-btn" onclick="addNewItem()">
+                            <i class="fas fa-plus"></i>
+                            Add Your First Listing
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filteredListings.forEach(listing => {
+                html += createListingCard(listing);
+            });
+            
+            listingsGrid.innerHTML = html;
+        }
+
+        function createListingCard(listing) {
+            const statusClass = `status-${listing.status}`;
+            const statusText = listing.status.charAt(0).toUpperCase() + listing.status.slice(1);
+            
+            return `
+                <div class="listing-card" onclick="viewListing(${listing.id})">
+                    <div class="listing-image">
+                        <img src="${listing.image}" alt="${listing.name}">
+                    </div>
+                    <div class="listing-details">
+                        <h3 class="listing-name">${listing.name}</h3>
+                        <div class="listing-price">$${listing.price}</div>
+                        <div class="listing-category">${listing.category}</div>
+                        <div class="listing-status">
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="listing-seller">${listing.seller}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function viewListing(listingId) {
+            const listing = listings.find(l => l.id === listingId);
+            if (listing) {
+                alert(`Viewing: ${listing.name}\nPrice: $${listing.price}\nCategory: ${listing.category}\nStatus: ${listing.status}`);
+            }
+        }
+
+        function addNewItem() {
+            window.location.href = 'newitem.html';
+        }
+    </script>
+</body>
+</html>

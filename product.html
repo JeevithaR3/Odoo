@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoFinds | Product Page</title>
+  <link rel="icon" href="logo_ecofinds.png" type="image/x-icon">
+  <style>
+    :root {
+      --silver-bird: #FBF5F0;
+      --soft-sunset: #F2E3D8;
+      --guerrilla-forest: #142D25;
+      --tropical-forest: #024A43;
+      --holy-cannoli: #DB783E;
+      --rum-punch: #AA423A;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, rgba(219,120,62,0.55), rgba(242,227,216,0.45), rgba(2,74,67,0.22));
+      min-height: 100vh;
+    }
+
+    /* --- top bar --- */
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      position: relative;
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--guerrilla-forest);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .logo img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .top-icons {
+      position: absolute;
+      right: 1.5rem;
+      display: flex;
+      gap: 1rem;
+    }
+    .cart-icon, .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--holy-cannoli);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--silver-bird);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .avatar {
+      background: var(--tropical-forest);
+    }
+
+    /* --- main section --- */
+    .main-section {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .glass-card {
+      background: rgba(242, 227, 216, 0.9);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    /* --- carousel --- */
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.4s ease-in-out;
+    }
+    .carousel-inner img {
+      width: 100%;
+      max-height: 380px;
+      object-fit: cover;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+    .dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.6rem;
+      gap: 6px;
+    }
+    .dots button {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: #bbb;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .dots button.active {
+      background: var(--holy-cannoli);
+    }
+
+    /* --- details --- */
+    .product-details h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--guerrilla-forest);
+      margin-bottom: 0.4rem;
+    }
+    .product-details .price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--holy-cannoli);
+      margin-bottom: 1rem;
+    }
+    .product-details p {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--guerrilla-forest);
+      margin-bottom: 0.6rem;
+    }
+
+    /* --- button --- */
+    .add-btn {
+      width: 100%;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: linear-gradient(to right, var(--holy-cannoli), var(--tropical-forest));
+      color: var(--silver-bird);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .add-btn:hover {
+      background: linear-gradient(to right, var(--tropical-forest), var(--holy-cannoli));
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+<body>
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="logo">
+      <img src="logo_ecofinds.png" alt="Logo"> EcoFinds
+    </div>
+    <div class="top-icons">
+      <div class="cart-icon">🛒</div>
+      <div class="avatar">👤</div>
+    </div>
+  </div>
+
+  <!-- Main Section -->
+  <div class="main-section">
+    <!-- Product Images -->
+    <div class="glass-card">
+      <div class="carousel">
+        <div class="carousel-inner" id="carouselInner">
+          <!-- Real bamboo bottle images -->
+          <img src="https://i.pinimg.com/1200x/9a/44/6e/9a446e0a4b71921c2bf6b6b49ff91a86.jpg" alt="Bamboo Bottle Front">
+          <img src="https://i.pinimg.com/1200x/bf/2e/d1/bf2ed1dd329de59db032f3e787fac6df.jpg" alt="Bamboo Bottle Side">
+          <img src="https://i.pinimg.com/1200x/90/80/18/9080183cb918a5bec59450e900130399.jpg" alt="Bamboo Bottle Close">
+        </div>
+      </div>
+      <div class="dots" id="carouselDots"></div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="glass-card product-details">
+      <h1>Eco-Friendly Bamboo Bottle</h1>
+      <div class="price">$25.00</div>
+      <p>This eco-friendly bamboo bottle is crafted from sustainable materials, designed to keep your drinks fresh while reducing plastic waste.</p>
+      <p><b>Category:</b> Kitchen Essentials</p>
+      <p><b>Condition:</b> Brand New</p>
+      <button class="add-btn">Add to Cart</button>
+    </div>
+  </div>
+
+  <script>
+    const carouselInner = document.getElementById("carouselInner");
+    const dotsContainer = document.getElementById("carouselDots");
+    const slides = carouselInner.children;
+    let currentIndex = 0;
+
+    // Generate dots
+    for (let i = 0; i < slides.length; i++) {
+      const dot = document.createElement("button");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => moveToSlide(i));
+      dotsContainer.appendChild(dot);
+    }
+
+    function moveToSlide(index) {
+      currentIndex = index;
+      carouselInner.style.transform = `translateX(-${index * 100}%)`;
+      [...dotsContainer.children].forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+      });
+    }
+  </script>
+</body>
+</html>

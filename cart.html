@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoFinds | Cart</title>
+  <link rel="icon" href="logo_ecofinds.png" type="image/x-icon">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --silver-bird: #FBF5F0;
+      --soft-sunset: #F2E3D8;
+      --guerrilla-forest: #142D25;
+      --tropical-forest: #024A43;
+      --holy-cannoli: #DB783E;
+      --rum-punch: #AA423A;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, rgba(219,120,62,0.55) 0%, rgba(242,227,216,0.45) 60%, rgba(2,74,67,0.22) 100%);
+      background-size: cover;
+      background-position: center center;
+      color: var(--guerrilla-forest);
+    }
+    .main-wrapper {
+      max-width: 600px;
+      margin: 40px auto 0 auto;
+      background: rgba(242,227,216,0.85);
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(20,45,37,0.13);
+      padding: 2.2rem 1.5rem 2rem 1.5rem;
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1.5px solid rgba(219, 120, 62, 0.18);
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--guerrilla-forest);
+      margin: 0 auto;
+    }
+    .logo img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .top-icons {
+      position: absolute;
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--tropical-forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--silver-bird);
+      font-size: 1.3rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .page-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--guerrilla-forest);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .cart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .cart-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      background: rgba(255,255,255,0.18);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(2,74,67,0.10);
+      padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+      border: 1.5px solid rgba(2,74,67,0.13);
+      transition: box-shadow 0.2s, background 0.2s;
+      position: relative;
+    }
+    .cart-card:hover {
+      box-shadow: 0 8px 32px rgba(2,74,67,0.18);
+      background: rgba(255,255,255,0.28);
+    }
+    .cart-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
+      background: var(--soft-sunset);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cart-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .cart-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      justify-content: center;
+    }
+    .cart-name {
+      font-size: 1.13rem;
+      font-weight: 600;
+      color: var(--guerrilla-forest);
+    }
+    .cart-price {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--holy-cannoli);
+    }
+    .cart-category {
+      font-size: 0.98rem;
+      color: var(--tropical-forest);
+      font-weight: 500;
+    }
+    .cart-seller {
+      font-size: 0.93rem;
+      color: var(--guerrilla-forest);
+      opacity: 0.7;
+    }
+    .cart-qty-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-top: 0.5rem;
+    }
+    .qty-btn {
+      background: var(--holy-cannoli);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .qty-btn:hover {
+      background: var(--tropical-forest);
+    }
+    .qty-input {
+      width: 38px;
+      text-align: center;
+      border: 1.5px solid var(--holy-cannoli);
+      border-radius: 6px;
+      font-size: 1rem;
+      padding: 3px 0;
+      background: var(--silver-bird);
+      color: var(--guerrilla-forest);
+    }
+    .remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--rum-punch);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .remove-btn:hover {
+      background: var(--holy-cannoli);
+      color: var(--guerrilla-forest);
+    }
+    .cart-summary {
+      background: rgba(255,255,255,0.18);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(2,74,67,0.10);
+      padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+      border: 1.5px solid rgba(2,74,67,0.13);
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+    .cart-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--tropical-forest);
+    }
+    .checkout-btn {
+      background: linear-gradient(to right, var(--holy-cannoli), var(--tropical-forest));
+      color: var(--silver-bird);
+      border: none;
+      border-radius: 10px;
+      padding: 0.9rem 2.2rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(20,45,37,0.13);
+    }
+    .checkout-btn:hover {
+      background: linear-gradient(to right, var(--tropical-forest), var(--holy-cannoli));
+      color: var(--guerrilla-forest);
+    }
+    @media (max-width: 700px) {
+      .main-wrapper {
+        max-width: 100%;
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+      }
+      .cart-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .cart-img {
+        width: 100%;
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="top-bar">
+      <div class="logo mx-auto" style="font-weight:700;font-size:1.3rem;color:#142D25;display:flex;align-items:center;gap:0.5rem;">
+        <img src="logo_ecofinds.png" alt="Logo" style="height:40px;width:40px;border-radius:50%;object-fit:cover;"> EcoFinds
+      </div>
+      <div class="top-icons" style="position:absolute; right:1.5rem; display:flex; align-items:center; gap:1.2rem;">
+        <a href="cart.html" class="cart-icon" style="text-decoration:none;">
+          🛒
+          <span class="cart-badge" id="cartCount">3</span>
+        </a>
+        <a href="dashboard.html" class="avatar" style="text-decoration:none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="8" r="4" fill="#FBF5F0"/>
+            <ellipse cx="12" cy="17" rx="7" ry="5" fill="#FBF5F0"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="page-title">Cart</div>
+    <div class="cart-list" id="cartList">
+      <!-- Cart items will be loaded here -->
+    </div>
+    <div class="cart-summary" id="cartSummary">
+      <!-- Cart summary will be loaded here -->
+    </div>
+  </div>
+  <script>
+    // Cart data structure
+    let cart = [
+      {
+        name: 'MacBook Pro 13"',
+        price: 800,
+        category: 'Electronics',
+        seller: 'Akshat Sinha',
+        image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop',
+        quantity: 1
+      },
+      {
+        name: 'Design Patterns Book',
+        price: 25,
+        category: 'Books',
+        seller: 'Priya Sharma',
+        image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=300&fit=crop',
+        quantity: 2
+      },
+      {
+        name: 'Vintage Denim Jacket',
+        price: 45,
+        category: 'Fashion',
+        seller: 'Jubilant Swan',
+        image: 'https://images.unsplash.com/photo-1551028719-001c4d5a0c27?w=300&h=300&fit=crop',
+        quantity: 1
+      }
+    ];
+    function renderCart() {
+      const cartList = document.getElementById('cartList');
+      if (!cart.length) {
+        cartList.innerHTML = '<div style="text-align:center;opacity:0.7;">Your cart is empty.</div>';
+        document.getElementById('cartSummary').innerHTML = '';
+        document.getElementById('cartCount').textContent = '0';
+        return;
+      }
+      document.getElementById('cartCount').textContent = cart.length;
+      cartList.innerHTML = cart.map((item, idx) => `
+        <div class="cart-card">
+          <div class="cart-img">
+            <img src="${item.image}" alt="${item.name}" />
+          </div>
+          <div class="cart-details">
+            <div class="cart-name">${item.name}</div>
+            <div class="cart-price">$${item.price}</div>
+            <div class="cart-category">${item.category}</div>
+            <div class="cart-seller">${item.seller}</div>
+            <div class="cart-qty-row">
+              <button class="qty-btn" onclick="updateQty(${idx}, -1)">-</button>
+              <input class="qty-input" type="number" min="1" value="${item.quantity}" onchange="setQty(${idx}, this.value)" />
+              <button class="qty-btn" onclick="updateQty(${idx}, 1)">+</button>
+            </div>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${idx})">Remove</button>
+        </div>
+      `).join('');
+      renderSummary();
+    }
+    function updateQty(idx, delta) {
+      cart[idx].quantity = Math.max(1, cart[idx].quantity + delta);
+      renderCart();
+    }
+    function setQty(idx, val) {
+      let v = parseInt(val);
+      if (isNaN(v) || v < 1) v = 1;
+      cart[idx].quantity = v;
+      renderCart();
+    }
+    function removeItem(idx) {
+      cart.splice(idx, 1);
+      renderCart();
+    }
+    function renderSummary() {
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      document.getElementById('cartSummary').innerHTML = `
+        <div class="cart-total">Total: $${total}</div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+      `;
+    }
+    function checkout() {
+      alert('Proceeding to checkout!');
+    }
+    renderCart();
+  </script>
+</body>
+</html>
