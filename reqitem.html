@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoSwap Dashboard - Request New Item</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="icon" href="./logo.png" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    // Tailwind CSS configuration for colors, fonts, and animations
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#4b6cb7",
+            secondary: "#3b5998",
+            accent: "#5f86d2",
+            light: "#b0c7f7",
+            dark: "#2c3e91",
+            sidebarBlue: "#1e40af",
+            signOutRed: "#dc2626",
+          },
+          fontFamily: {
+            sans: ["Poppins", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+          },
+          animation: {
+            float: "float 6s ease-in-out infinite",
+          },
+          keyframes: {
+            float: {
+              "0%,100%": { transform: "translateY(0)" },
+              "50%": { transform: "translateY(-14px)" },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Custom CSS styles for gradients, sidebar, and form elements */
+    .gradient-text {
+      background: linear-gradient(90deg, #4b6cb7 0%, #3b5998 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    #sidebar {
+      min-width: 220px;
+      max-width: 220px;
+      background-color: #1b244a;
+      display: flex;
+      flex-direction: column;
+      padding-top: 1rem;
+    }
+
+    #sidebar nav a {
+      color: white;
+      font-weight: 500;
+    }
+    #sidebar nav a:hover:not(.active) {
+      background-color: #3b5998;
+      color: white;
+    }
+    #sidebar nav a.active {
+      background-color: #5f86d2;
+      color: white;
+    }
+
+    #signout-tab {
+      margin-top: auto;
+      background-color: #dc2626;
+      color: white;
+      font-weight: 600;
+    }
+    #signout-tab:hover {
+      background-color: #b91c1c;
+    }
+
+    body.dark {
+      background-color: #1f2937;
+      color: #d1d5db;
+    }
+    body.dark #sidebar {
+      background-color: #182b69;
+    }
+
+    #sidebar-search {
+      padding: 0 1rem 1rem 1rem;
+    }
+    #sidebar-search input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+      transition: border-color 0.3s ease;
+    }
+    body.dark #sidebar-search input {
+        background-color: #1f2937;
+        color: #d1d5db;
+        border-color: #4a5568;
+    }
+    #sidebar-search input:focus {
+      outline: none;
+      border-color: #4b6cb7;
+      box-shadow: 0 0 0 3px rgb(75 108 183 / 0.3);
+    }
+
+    #theme-toggle {
+      background-color: transparent !important;
+    }
+    body.dark #icon-sun {
+      display: block !important;
+      color: white;
+    }
+    body:not(.dark) #icon-moon {
+      display: block !important;
+      color: black;
+    }
+
+    /* Form Styles (adapted for reqitem.html) */
+    .form-group label {
+      font-weight: 600;
+      display: block; /* Ensures label takes full width */
+      margin-bottom: 0.5rem; /* Spacing below label */
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border-radius: 0.375rem;
+      border: 1px solid #cbd5e1;
+      background-color: #ffffff; /* Light background for inputs */
+      padding: 0.75rem; /* Increased padding for better touch targets */
+      font-size: 1rem; /* Standard font size */
+      color: #1f2937; /* Dark text for inputs */
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body.dark .form-group input,
+    body.dark .form-group select,
+    body.dark .form-group textarea {
+      background-color: #1f2937; /* Dark background for inputs in dark mode */
+      border-color: #4a5568; /* Darker border in dark mode */
+      color: #d1d5db; /* Lighter text in dark mode */
+    }
+
+    .form-group input:focus,
+    body.dark .form-group select:focus,
+    body.dark .form-group textarea:focus {
+      outline: none;
+      border-color: #4b6cb7;
+      box-shadow: 0 0 0 3px rgb(75 108 183 / 0.3);
+    }
+
+    .error {
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-top: 0.25rem; /* Spacing above error message */
+      display: block; /* Ensures error message is on its own line */
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background-color: #4b6cb7;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .submit-btn:hover {
+      background-color: #3b5998;
+    }
+  </style>
+</head>
+<body
+  class="font-sans text-gray-800 antialiased min-h-screen flex flex-col bg-blue-50 dark:bg-[#1e3a8a]"
+>
+  <nav
+    class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur shadow-sm dark:bg-gray-800/90 flex items-center justify-between px-6 py-4"
+  >
+    <a href="index.html" class="flex items-center space-x-3">
+      <img src="./logo.png" alt="EcoSwap logo" class="h-12 w-auto" />
+      <span class="text-2xl font-bold gradient-text">EcoSwap</span>
+    </a>
+
+    <h1
+      class="text-2xl font-serif font-bold text-gray-800 dark:text-gray-200"
+    >
+      Dashboard
+    </h1>
+
+    <button
+      id="theme-toggle"
+      aria-label="Toggle dark/light mode"
+      class="px-4 py-2 rounded-md text-white hover:bg-accent transition flex items-center"
+      type="button"
+    >
+      <svg
+        id="icon-sun"
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 hidden"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z"
+        />
+      </svg>
+      <svg
+        id="icon-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 hidden"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+      </svg>
+    </button>
+  </nav>
+
+  <main class="flex pt-20 pl-[220px] min-h-screen bg-white dark:bg-[#1f2937]">
+    <aside
+      id="sidebar"
+      class="fixed top-20 bottom-0 left-0 flex flex-col overflow-y-auto"
+    >
+      <div id="sidebar-search">
+        <input
+          type="text"
+          placeholder="Search..."
+          aria-label="Search"
+          class="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+        />
+      </div>
+
+      <nav class="flex flex-col mt-2 space-y-1 px-4 flex-grow">
+        <a href="dashboard.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Profile</a>
+        <a
+          href="newitem.html"
+          class="rounded-md px-4 py-3 transition text-white font-medium"
+          >Add New Item</a
+        >
+        <a
+          href="posted.html"
+          class="hover:bg-primary rounded-md px-4 py-3 cursor-default"
+          >My Posted Items</a
+        >
+        <a href="reqitem.html" class="active rounded-md px-4 py-3 text-white font-medium">Request New Item</a>
+        <a href="reqJeevitha.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Requested Items</a>
+      </nav>
+
+      <nav class="px-4 py-3">
+        <a
+          href="index.html"
+          id="signout-tab"
+          class="block rounded-md px-4 py-3 text-white transition"
+          >Sign Out</a
+        >
+      </nav>
+    </aside>
+
+    <section
+      class="flex-1 bg-transparent dark:bg-[#1f2937] p-8 text-gray-800 dark:text-gray-200 max-w-3xl mx-auto rounded-none shadow-none flex flex-col justify-center min-h-[calc(100vh-5rem)]"
+    >
+      <h2 class="text-3xl font-semibold mb-8 text-center">Request an Item</h2>
+      <form id="reqItemForm" class="space-y-6">
+        <div class="form-group">
+          <label for="reqCategory">Category:</label>
+          <select
+            id="reqCategory"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          >
+            <option value="">Select</option>
+            <option>Electronics</option>
+            <option>Books</option>
+            <option>Clothing</option>
+            <option>Furniture</option>
+          </select>
+          <span class="error" id="error-reqCategory"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reqItemName">Item Name:</label>
+          <input
+            type="text"
+            id="reqItemName"
+            placeholder="Name of the item"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-reqItemName"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reqDescription">Why You Need It:</label>
+          <textarea
+            id="reqDescription"
+            rows="3"
+            placeholder="Explain your need..."
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          ></textarea>
+          <span class="error" id="error-reqDescription"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reqCondition">Condition Preferred (Optional):</label>
+          <input
+            type="text"
+            id="reqCondition"
+            placeholder="e.g., New, Working, Any"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="reqLocation">Your Location:</label>
+          <input
+            type="text"
+            id="reqLocation"
+            placeholder="City name.."
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-reqLocation"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reqEmail">Email:</label>
+          <input
+            type="email"
+            id="reqEmail"
+            placeholder="you@example.com"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-reqEmail"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reqPhone">Phone:</label>
+          <input
+            type="tel"
+            id="reqPhone"
+            maxlength="10"
+            placeholder="Your 10-digit number"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-reqPhone"></span>
+        </div>
+
+        <button type="submit" class="submit-btn" id="requestSubmitBtn">Submit Request</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module">
+    // Firebase Modular SDK Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+    import { getFirestore, doc, collection, addDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWQIJirF6ap5HOE55yNL_zTiZWTzS-luo",
+      authDomain: "ecoswap-4db13.firebaseapp.com",
+      projectId: "ecoswap-4db13",
+      storageBucket: "ecoswap-4db13.appspot.com",
+      messagingSenderId: "184392888367",
+      appId: "1:184392888367:web:6986d2bd7bd8c97c9f16da",
+      measurementId: "G-X94Q876C3D"
+    };
+
+    // Initialize Firebase services
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null; // Variable to store the currently logged-in user
+
+    // --- Theme Toggle Logic ---
+    const toggleBtn = document.getElementById("theme-toggle");
+    const sunIcon = document.getElementById("icon-sun");
+    const moonIcon = document.getElementById("icon-moon");
+    function updateThemeIcons() {
+      if (document.body.classList.contains("dark")) {
+        sunIcon.style.display = "block";
+        moonIcon.style.display = "none";
+      } else {
+        sunIcon.style.display = "none";
+        moonIcon.style.display = "block";
+      }
+    }
+
+    function loadTheme() {
+      const savedTheme = localStorage.getItem("theme");
+      if (
+        savedTheme === "dark" ||
+        (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.body.classList.add("dark");
+      } else {
+        document.body.classList.remove("dark");
+      }
+      updateThemeIcons();
+    }
+
+    // Event listener for theme toggle button
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+      updateThemeIcons();
+    });
+
+    // Load theme when the script runs
+    loadTheme();
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        currentUser = user;
+        console.log("Logged in as:", user.email);
+      } else {
+        currentUser = null;
+        console.log("No user logged in. Redirecting to login page.");
+        alert("Please log in to request an item.");
+        window.location.href = "login.html"; // Redirect to your login page
+      }
+    });
+
+    function validateForm() {
+      let isValid = true;
+      // Clear all existing error messages
+      document.querySelectorAll(".error").forEach(e => (e.textContent = ""));
+
+      // Define required fields and their display names
+      const fields = [
+        { id: "reqCategory", name: "Category" },
+        { id: "reqItemName", name: "Item Name" },
+        { id: "reqDescription", name: "Description" },
+        { id: "reqLocation", name: "Location" },
+        { id: "reqEmail", name: "Email" },
+        { id: "reqPhone", name: "Phone" }
+      ];
+
+      // Validate each required field for emptiness
+      fields.forEach(field => {
+        const input = document.getElementById(field.id);
+        const error = document.getElementById(`error-${field.id}`);
+        if (!input.value.trim()) {
+          error.textContent = `Please enter ${field.name.toLowerCase()}.`;
+          isValid = false;
+        }
+      });
+
+      // Validate email format
+      const email = document.getElementById("reqEmail").value.trim();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (email && !emailPattern.test(email)) {
+        document.getElementById("error-reqEmail").textContent = "Enter a valid email address.";
+        isValid = false;
+      }
+
+      // Validate phone number format (10 digits)
+      const phone = document.getElementById("reqPhone").value.trim();
+      const phonePattern = /^\d{10}$/;
+      if (phone && !phonePattern.test(phone)) {
+        document.getElementById("error-reqPhone").textContent = "Enter a valid 10-digit phone number.";
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // --- Form Submission Logic ---
+    const reqItemForm = document.getElementById("reqItemForm");
+    const requestSubmitBtn = document.getElementById("requestSubmitBtn");
+
+    reqItemForm.addEventListener("submit", async function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Check if user is logged in
+      if (!currentUser) {
+        alert("You must be logged in to submit a request.");
+        window.location.href = "login.html"; // Redirect to login page
+        return;
+      }
+
+      // Validate the form before proceeding
+      if (!validateForm()) {
+        return; // Stop submission if validation fails
+      }
+
+      // Disable button and update text for user feedback
+      requestSubmitBtn.disabled = true;
+      requestSubmitBtn.textContent = "Submitting...";
+
+      // Prepare request data
+      const requestData = {
+        category: document.getElementById("reqCategory").value.trim(),
+        itemName: document.getElementById("reqItemName").value.trim(),
+        description: document.getElementById("reqDescription").value.trim(),
+        preferredCondition: document.getElementById("reqCondition").value.trim(), // Optional field
+        location: document.getElementById("reqLocation").value.trim(),
+        email: document.getElementById("reqEmail").value.trim(),
+        phone: document.getElementById("reqPhone").value.trim(),
+        requester_id: currentUser.uid, // Store the user ID as 'requester_id'
+        reqProviderId: null, // Placeholder for future feature to link to a provider
+        requestedAt: new Date() // Timestamp of the request
+      };
+
+      try {
+        // 1. Store request in the top-level 'requesteditems' collection
+        const globalRequestedItemsCollectionRef = collection(db, "requesteditems");
+        const newGlobalRequestDocRef = await addDoc(globalRequestedItemsCollectionRef, requestData);
+
+        // Update the global document with its own ID for easy referencing
+        await setDoc(newGlobalRequestDocRef, { requestitemId: newGlobalRequestDocRef.id }, { merge: true });
+
+
+        
+        const userRef = doc(db, "users", currentUser.uid);
+        const userRequestedItemsCollection = collection(userRef, "requestedItems");
+        
+        const userSpecificRequestData = {
+            ...requestData,
+            requestitemId: newGlobalRequestDocRef.id // Link to the global item
+        };
+        // Use setDoc with the global ID as the document ID for the user's subcollection
+        // This ensures both requestitemId and requestId refer to the same generated ID.
+        await setDoc(doc(userRequestedItemsCollection, newGlobalRequestDocRef.id), userSpecificRequestData);
+
+
+        alert("Item request submitted successfully!");
+        reqItemForm.reset(); // Clear the form fields
+        window.location.href = "dashboard.html"; // Redirect to the dashboard
+      } catch (error) {
+        console.error("Error storing request:", error);
+        alert("Failed to submit request. Please try again later.");
+      } finally {
+        // Re-enable button and reset text regardless of success or failure
+        requestSubmitBtn.disabled = false;
+        requestSubmitBtn.textContent = "Submit Request";
+      }
+    });
+  </script>
+</body>
+</html>
