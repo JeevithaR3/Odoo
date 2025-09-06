@@ -435,288 +435,56 @@
     </section>
   </main>
 
-  <script type="module">
-    // Theme toggle logic
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-    import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+  <script>
+let uploadedImages = [];
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAWQIJirF6ap5HOE55yNL_zTiZWTzS-luo",
-      authDomain: "ecoswap-4db13.firebaseapp.com",
-      projectId: "ecoswap-4db13",
-      storageBucket: "ecoswap-4db13.appspot.com",
-      messagingSenderId: "184392888367",
-      appId: "1:184392888367:web:6986d2bd7bd8c97c9f16da",
-      measurementId: "G-X94Q876C3D"
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!validateForm()) return;
+
+  finalSubmitBtn.disabled = true;
+  finalSubmitBtn.textContent = "Submitting...";
+
+  try {
+    const itemData = {
+      category: document.getElementById("category").value.trim(),
+      itemName: document.getElementById("itemName").value.trim(),
+      description: document.getElementById("description").value.trim(),
+      itemCondition: document.getElementById("itemCondition").value.trim(),
+      itemAction: document.getElementById("itemAction").value.trim(),
+      location: document.getElementById("location").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      userId: 1, // 👈 for now, use the test user with id=1
+      imageCount: uploadedImages.length,
     };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const toggleBtn = document.getElementById("theme-toggle");
-    const sunIcon = document.getElementById("icon-sun");
-    const moonIcon = document.getElementById("icon-moon");
-    const greenPointsDisplay = document.getElementById("greenPointsDisplay"); // New: Green points display element
-
-    function updateThemeIcons() {
-      if (document.body.classList.contains("dark")) {
-        sunIcon.style.display = "block";
-        moonIcon.style.display = "none";
-      } else {
-        sunIcon.style.display = "none";
-        moonIcon.style.display = "block";
-      }
-    }
-
-    function loadTheme() {
-      const savedTheme = localStorage.getItem("theme");
-      if (
-        savedTheme === "dark" ||
-        (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.body.classList.add("dark");
-      } else {
-        document.body.classList.remove("dark");
-      }
-      updateThemeIcons();
-    }
-
-    toggleBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-      updateThemeIcons();
+    const response = await fetch("http://127.0.0.1:5000/api/items", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(itemData),
     });
 
-    loadTheme();
-
-    let uploadedImages = []; // Stores objects: { id, file }
-    let currentUser = null;
-
-    const form = document.getElementById("itemForm");
-    const chooseImagesBtn = document.getElementById("chooseImagesBtn");
-    const itemPhotosInput = document.getElementById("itemPhotos");
-    const imagePreviewContainer = document.getElementById("imagePreviewContainer");
-    const finalSubmitBtn = document.getElementById("finalSubmitBtn");
-
-    // Function to fetch and display green points
-    async function fetchAndDisplayGreenPoints(userId) {
-        if (!userId) {
-            greenPointsDisplay.textContent = "N/A";
-            return;
-        }
-        try {
-            const userDocRef = doc(db, "users", userId);
-            const userDocSnap = await getDoc(userDocRef);
-            if (userDocSnap.exists()) {
-                const userData = userDocSnap.data();
-                greenPointsDisplay.textContent = userData.greenPoints !== undefined ? userData.greenPoints : 0;
-            } else {
-                greenPointsDisplay.textContent = 0; // Default to 0 if user doc doesn't exist yet
-            }
-        } catch (error) {
-            console.error("Error fetching green points:", error);
-            greenPointsDisplay.textContent = "Error";
-        }
+    const result = await response.json();
+    if (result.success) {
+      alert("Item submitted successfully!");
+      form.reset();
+      uploadedImages = [];
+      imagePreviewContainer.innerHTML = "";
+      window.location.href = "posted.html";
+    } else {
+      alert("Error: " + result.message);
     }
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Server error. Please try again.");
+  } finally {
+    finalSubmitBtn.disabled = false;
+    finalSubmitBtn.textContent = "Submit Item";
+  }
+});
+</script>
 
-    // Listen for user login state
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        currentUser = user;
-        console.log("User signed in:", user.email);
-        fetchAndDisplayGreenPoints(user.uid); // Fetch points on login
-      } else {
-        currentUser = null;
-        console.log("No user signed in");
-        // Optionally redirect to login or show a message
-        alert("You must be logged in to add a new item.");
-        window.location.href = "index.html"; // Redirect to login page
-      }
-    });
-
-    // Open file dialog on button click
-    chooseImagesBtn.addEventListener("click", () => {
-      itemPhotosInput.click();
-    });
-
-    // Handle image uploads and previews
-    itemPhotosInput.addEventListener("change", event => {
-      const files = Array.from(event.target.files);
-      const errorField = document.getElementById("error-itemPhotos");
-
-      // Check if adding new files exceeds the limit
-      if ((uploadedImages.length + files.length) > 4) {
-        errorField.textContent = `You can only upload up to 4 images. You have ${uploadedImages.length} already, and are trying to add ${files.length}.`;
-        return;
-      }
-      errorField.textContent = ""; // Clear previous error
-
-      files.forEach(file => {
-        if (!file.type.startsWith("image/")) return;
-
-        const reader = new FileReader();
-        reader.onload = e => {
-          const imageId = Date.now() + Math.random();
-          // Store only a reference to the file or its URL if needed, but not the File object itself if you only want count
-          // For previews, we need the URL, so we'll store a temporary one.
-          uploadedImages.push({ id: imageId, url: e.target.result }); // Store temporary URL for preview
-
-          const preview = document.createElement("div");
-          preview.className = "image-preview";
-          preview.dataset.id = imageId;
-
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          img.alt = "Image preview";
-
-          const removeBtn = document.createElement("button");
-          removeBtn.className = "remove-btn";
-          removeBtn.innerHTML = "&times;"; // HTML entity for multiplication sign
-          removeBtn.setAttribute('aria-label', 'Remove image');
-          removeBtn.onclick = () => removeImage(imageId);
-
-          preview.appendChild(img);
-          preview.appendChild(removeBtn);
-          imagePreviewContainer.appendChild(preview);
-        };
-        reader.readAsDataURL(file);
-      });
-
-      event.target.value = ""; // Clear the input so the same file can be selected again (important for 'change' event)
-    });
-
-    function removeImage(imageId) {
-      uploadedImages = uploadedImages.filter(img => img.id !== imageId);
-      const imageDiv = document.querySelector(`.image-preview[data-id='${imageId}']`);
-      if (imageDiv) imageDiv.remove();
-      document.getElementById("error-itemPhotos").textContent = ""; // Clear image count error if images are removed
-    }
-
-    // Validate form inputs
-    function validateForm() {
-      let isValid = true;
-      document.querySelectorAll(".error").forEach(e => (e.textContent = "")); // Clear all errors
-
-      const fields = [
-        { id: "category", name: "Category" },
-        { id: "itemName", name: "Item Name" },
-        { id: "description", name: "Description" },
-        { id: "location", name: "Location" },
-        { id: "email", name: "Email" },
-        { id: "phone", name: "Phone" },
-        { id: "itemCondition", name: "Condition" },
-        { id: "itemAction", name: "Action" }
-      ];
-
-      fields.forEach(field => {
-        const input = document.getElementById(field.id);
-        const error = document.getElementById(`error-${field.id}`);
-        if (!input.value.trim()) {
-          error.textContent = `Please enter ${field.name.toLowerCase()}.`;
-          isValid = false;
-        }
-      });
-
-      const email = document.getElementById("email").value.trim();
-      const emailError = document.getElementById("error-email");
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (email && !emailPattern.test(email)) {
-        emailError.textContent = "Enter a valid email address.";
-        isValid = false;
-      }
-
-      const phone = document.getElementById("phone").value.trim();
-      const phoneError = document.getElementById("error-phone");
-      const phonePattern = /^\d{10}$/;
-      if (phone && !phonePattern.test(phone)) {
-        phoneError.textContent = "Enter a valid 10-digit phone number.";
-        isValid = false;
-      }
-
-      const imgError = document.getElementById("error-itemPhotos");
-      if (uploadedImages.length === 0) {
-        imgError.textContent = "Please upload at least one image.";
-        isValid = false;
-      }
-
-      return isValid;
-    }
-
-    // Handle form submission
-    form.addEventListener("submit", async event => {
-      event.preventDefault(); // Prevent default form submission
-
-      if (!currentUser) {
-        alert("Please log in to submit an item.");
-        window.location.href = "index.html"; // Redirect to login if not logged in
-        return;
-      }
-
-      if (!validateForm()) {
-        return; // Stop if validation fails
-      }
-
-      finalSubmitBtn.disabled = true;
-      finalSubmitBtn.textContent = "Submitting...";
-
-      try {
-        const imageCount = uploadedImages.length; // Get the count of previewed images
-
-        const itemData = {
-          category: document.getElementById("category").value.trim(),
-          itemName: document.getElementById("itemName").value.trim(),
-          description: document.getElementById("description").value.trim(),
-          itemCondition: document.getElementById("itemCondition").value.trim(),
-          itemAction: document.getElementById("itemAction").value.trim(),
-          location: document.getElementById("location").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          phone: document.getElementById("phone").value.trim(),
-          userId: currentUser.uid,
-          imageCount: imageCount, // Store the count of images
-          createdAt: new Date()
-        };
-
-        // Reference to user's postItems collection
-        const userDocRef = doc(db, "users", currentUser.uid);
-        const postItemsCollectionRef = collection(userDocRef, "postItems");
-
-        // Add the item to user's postItems (auto-generates an ID)
-        const newItemDocRef = await addDoc(postItemsCollectionRef, itemData);
-
-        // Update the newly created doc with the postitemId field (the doc ID)
-        await setDoc(newItemDocRef, { postitemId: newItemDocRef.id }, { merge: true });
-
-        // Now create/copy to global 'items' collection using same docId and include postitemId field
-        const globalItemData = {
-          ...itemData,
-          postitemId: newItemDocRef.id,
-          docId: newItemDocRef.id,
-        };
-
-        const globalItemRef = doc(db, "items", newItemDocRef.id);
-        await setDoc(globalItemRef, globalItemData);
-
-        await updateDoc(userDocRef, {
-            greenPoints: increment(10)
-        });
-        fetchAndDisplayGreenPoints(currentUser.uid); // Update frontend display
-
-        alert("Item submitted successfully and 10 green points added!");
-        form.reset(); // Clear the form
-        uploadedImages = []; // Clear uploaded images array
-        imagePreviewContainer.innerHTML = ""; // Clear image previews
-        window.location.href = "posted.html"; // Redirect to my posted items page
-      } catch (error) {
-        console.error("Error submitting item:", error);
-        alert("Failed to submit item. Please try again later.");
-      } finally {
-        finalSubmitBtn.disabled = false;
-        finalSubmitBtn.textContent = "Submit Item";
-      }
-    });
-  </script>
 </body>
 </html>
