@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lender Dashboard - EcoSwap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 dark:bg-[#1e3a8a] text-gray-800 dark:text-gray-200 font-sans">
+  <main class="p-6 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Pending Requests</h2>
+    <div id="requestsList" class="space-y-4"></div>
+  </main>
+
+  <script>
+    const requestsDiv = document.getElementById("requestsList");
+    const lenderName = "LenderName"; // Replace with actual logged-in lender name
+    const providerPhone = "1234567890"; // Replace with actual phone
+    const providerAddress = "Some Address"; // Replace with actual address
+
+    async function loadRequests() {
+      try {
+        const res = await fetch("http://127.0.0.1:5000/api/requests");
+        const requests = await res.json();
+
+        requestsDiv.innerHTML = "";
+
+        if (requests.length === 0) {
+          requestsDiv.innerHTML = `<p>No requests yet.</p>`;
+          return;
+        }
+
+        requests.forEach(req => {
+          // Only show pending requests
+          if (req.status && req.status !== "pending") return;
+
+          const div = document.createElement("div");
+          div.className = "p-4 bg-white dark:bg-gray-800 rounded shadow space-y-2";
+
+          div.innerHTML = `
+            <p><strong>Item:</strong> ${req.itemName}</p>
+            <p><strong>Description:</strong> ${req.description || "-"}</p>
+            <div class="flex gap-2 mt-2">
+              <button class="accept-btn bg-green-500 text-white px-3 py-1 rounded">Accept</button>
+              <button class="reject-btn bg-red-500 text-white px-3 py-1 rounded">Reject</button>
+            </div>
+          `;
+
+          requestsDiv.appendChild(div);
+
+          // Attach click handlers directly
+          const acceptBtn = div.querySelector(".accept-btn");
+          acceptBtn.onclick = async () => {
+            await updateRequestStatus(req.id, "accepted");
+          };
+
+          const rejectBtn = div.querySelector(".reject-btn");
+          rejectBtn.onclick = async () => {
+            await updateRequestStatus(req.id, "rejected");
+          };
+        });
+      } catch (err) {
+        console.error("Failed to load requests:", err);
+        requestsDiv.innerHTML = "<p>Error loading requests.</p>";
+      }
+    }
+
+    async function updateRequestStatus(id, status) {
+      try {
+        const res = await fetch(`http://127.0.0.1:5000/api/requests/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status,
+            acceptedBy: status === "accepted" ? lenderName : null,
+            providerPhone: status === "accepted" ? providerPhone : null,
+            providerAddress: status === "accepted" ? providerAddress : null
+          })
+        });
+
+        if (res.ok) {
+          alert(`Request ${status}!`);
+          loadRequests(); // Refresh list
+        } else {
+          alert("Failed to update request.");
+        }
+      } catch (err) {
+        console.error("Error updating request:", err);
+        alert("Failed to update request.");
+      }
+    }
+
+    // Initial load + live refresh every 5s
+    loadRequests();
+    setInterval(loadRequests, 5000);
+  </script>
+</body>
+</html>
